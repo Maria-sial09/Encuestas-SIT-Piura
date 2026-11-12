@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuesta de Movilidad Urbana en Piura – SIT</title>
+<style>
+  :root {
+    --primary: #0f4c81;
+    --primary-light: #e8f1f8;
+    --accent: #1b8a5a;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #d1d5db;
+  }
+  * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body { background: var(--bg); color: var(--text); margin: 0; padding: 14px; }
+  .container { max-width: 820px; margin: 0 auto; background: var(--card); border-radius: 12px; padding: 22px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+  h1 { font-size: 1.3rem; color: var(--primary); margin-top: 0; }
+  h2 { font-size: 1.08rem; color: var(--text); margin-bottom: 6px; border-bottom: 2px solid var(--primary-light); padding-bottom: 6px; }
+  p.desc { color: var(--muted); font-size: 0.9rem; line-height: 1.48; }
+  .consent-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 14px; border-radius: 6px; font-size: 0.88rem; line-height: 1.5; margin-bottom: 16px; }
+  .q-block { margin-bottom: 18px; }
+  .q-title { display: block; font-size: 0.92rem; font-weight: 600; margin-bottom: 6px; }
+  .q-title span.req { color: #dc2626; }
+  input[type="text"], input[type="number"], select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.94rem; background: #fff; }
+  .radio-group { display: flex; flex-direction: column; gap: 7px; }
+  .radio-opt { display: flex; align-items: center; gap: 8px; font-size: 0.91rem; cursor: pointer; padding: 6px 8px; border-radius: 6px; border: 1px solid transparent; }
+  .radio-opt:hover { background: #f9fafb; border-color: #e5e7eb; }
+  .radio-opt input[type="radio"] { transform: scale(1.15); cursor: pointer; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 13px 20px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+  .btn:hover { opacity: 0.92; }
+  .progress-bar { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
+  .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+  .badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; }
+  table.sp-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  table.sp-table th, table.sp-table td { border: 1px solid var(--border); padding: 9px 6px; text-align: center; }
+  table.sp-table th { background: var(--primary); color: #fff; }
+  table.sp-table td:first-child { text-align: left; font-weight: 600; background: #f9fafb; }
+  .delta { display: block; font-size: 0.74rem; color: var(--muted); }
+  .choice-row td { background: #f0fdf4; }
+  .choice-label { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-weight: 700; color: var(--primary); padding: 4px; }
+  .choice-label input { transform: scale(1.25); cursor: pointer; }
+  .hidden { display: none !important; }
+  .alert { background: #fef2f2; color: #991b1b; padding: 10px; border-radius: 8px; font-size: 0.86rem; margin-bottom: 12px; display: none; }
+  .status-box { padding: 12px; border-radius: 8px; font-size: 0.9rem; margin-top: 12px; }
+  .status-ok { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+  .status-err { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- SECCIÓN 1: CONSENTIMIENTO -->
+  <div id="sec-1">
+    <span class="badge">Sección 1 de 5 · Consentimiento</span>
+    <h1>Encuesta de Movilidad Urbana en Piura</h1>
+    <div class="consent-box">
+      <strong>Estimado(a) participante:</strong><br>
+      La presente encuesta forma parte de una investigación académica sobre la mejora del servicio de transporte público urbano en la ciudad de Piura. Su participación es completamente <strong>voluntaria y anónima</strong>, y responderla le tomará aproximadamente 5 a 8 minutos.<br><br>
+      De conformidad con lo establecido en la <strong>Ley N.° 29733, Ley de Protección de Datos Personales</strong>, y su reglamento, la información recopilada será tratada con estricta confidencialidad y utilizada únicamente con fines estadísticos y académicos, sin identificar a los encuestados.
+    </div>
+
+    <div class="q-block">
+      <span class="q-title">1. ¿Está usted de acuerdo en responder esta breve encuesta? <span class="req">*</span></span>
+      <div class="radio-group">
+        <label class="radio-opt"><input type="radio" name="p1" value="Acepto"> Acepto participar voluntariamente en esta investigación y autorizo el uso de mis respuestas para fines estrictamente académicos</label>
+        <label class="radio-opt"><input type="radio" name="p1" value="No acepto"> No acepto participar</label>
+      </div>
+    </div>
+    <div id="err-1" class="alert">Por favor seleccione una opción para continuar.</div>
+    <button class="btn" onclick="validarSec1()">Continuar &rarr;</button>
+  </div>
+
+  <!-- SECCIÓN 2: DATOS GENERALES (P2 - P7) -->
+  <div id="sec-2" class="hidden">
+    <span class="badge">Sección 2 de 5 · Datos Generales</span>
+    <h2>Datos Generales</h2>
+    <div id="err-2" class="alert">Por favor complete todas las preguntas obligatorias (*) antes de continuar.</div>
+
+    <div class="grid-2">
+      <div class="q-block">
+        <label class="q-title" for="p2">2. Género <span class="req">*</span></label>
+        <select id="p2">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Prefiero no decir">Prefiero no decir</option>
+        </select>
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p3">3. Edad <span class="req">*</span></label>
+        <select id="p3">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Menos de 18">Menos de 18</option>
+          <option value="18 - 24">18 - 24</option>
+          <option value="25 - 34">25 - 34</option>
+          <option value="35 - 44">35 - 44</option>
+          <option value="45 - 54">45 - 54</option>
+          <option value="55 - 64">55 - 64</option>
+          <option value="65 a mas">65 a más</option>
+        </select>
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p4">4. Ocupación <span class="req">*</span></label>
+        <select id="p4" onchange="toggleOtro('p4', 'p4-otro')">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Estudiante">Estudiante</option>
+          <option value="Trabajador dependiente">Trabajador dependiente</option>
+          <option value="Trabajador independiente">Trabajador independiente</option>
+          <option value="Ama de casa">Ama de casa</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="p4-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique su ocupación">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p5">5. Rango de ingreso mensual</label>
+        <select id="p5">
+          <option value="No especificado">Seleccione su respuesta (opcional)...</option>
+          <option value="Hasta S/ 1130">Hasta S/ 1130</option>
+          <option value="S/ 1131 - 2000">S/ 1131 - 2000</option>
+          <option value="S/ 2001 - 3500">S/ 2001 - 3500</option>
+          <option value="Mas de S/ 3500">Más de S/ 3500</option>
+          <option value="Prefiero no decir">Prefiero no decir</option>
+        </select>
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p6">6. Ruta del bus en la que se encuesta <span class="req">*</span></label>
+        <select id="p6" onchange="toggleOtro('p6', 'p6-otro')">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Bus Bolognesi">Bus Bolognesi</option>
+          <option value="Bus Sican">Bus Sican</option>
+          <option value="Bus Nueva Alternativa - Ruta 14">Bus Nueva Alternativa - Ruta 14</option>
+          <option value="Bus Olas del Pacifico">Bus Olas del Pacifico</option>
+          <option value="Bus Cruzero">Bus Cruzero</option>
+          <option value="Bus Morado">Bus Morado</option>
+          <option value="Bus Piuranito">Bus Piuranito</option>
+          <option value="Bus Nueva Alternativa - Ruta 16">Bus Nueva Alternativa - Ruta 16</option>
+          <option value="Otro">Otra ruta</option>
+        </select>
+        <input type="text" id="p6-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique la ruta del bus">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p7">7. Franja horaria <span class="req">*</span></label>
+        <select id="p7">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Pico manana (6 - 9)">Pico mañana (6 - 9)</option>
+          <option value="Valle (9 - 17)">Valle (9 - 17)</option>
+          <option value="Pico Tarde (17 - 20)">Pico Tarde (17 - 20)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="validarSec2()">Siguiente &rarr;</button>
+  </div>
+
+  <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P11) -->
+  <div id="sec-3" class="hidden">
+    <span class="badge">Sección 3 de 5 · Caracterización declarativa</span>
+    <h2>Caracterización declarativa</h2>
+    <p class="desc">Estas preguntas son respecto a su viaje principal, el que realiza con más frecuencia.</p>
+    <div id="err-3" class="alert">Por favor responda todas las preguntas visibles antes de continuar.</div>
+
+    <div class="q-block">
+      <label class="q-title" for="p8">8. ¿Qué medio de transporte utiliza con mayor frecuencia para sus viajes diarios? <span class="req">*</span></label>
+      <select id="p8" onchange="toggleOtro('p8', 'p8-otro')">
+        <option value="">Seleccione su respuesta...</option>
+        <option value="Mototaxi">Mototaxi</option>
+        <option value="Motolineal">Motolineal</option>
+        <option value="Bus de Transporte publico">Bus de Transporte público</option>
+        <option value="Taxi / Taxi colectivo">Taxi / Taxi colectivo</option>
+        <option value="Vehiculo particular">Vehículo particular</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <input type="text" id="p8-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el medio de transporte">
+    </div>
+
+    <div class="q-block">
+      <label class="q-title" for="p9">9. ¿Qué medio utilizaba con mayor frecuencia antes de este? <span class="req">*</span></label>
+      <select id="p9" onchange="manejarRamificacionP9()">
+        <option value="">Seleccione su respuesta...</option>
+        <option value="Mototaxi">Mototaxi</option>
+        <option value="Motolineal">Motolineal</option>
+        <option value="Bus de Transporte publico">Bus de Transporte público</option>
+        <option value="Taxi / Taxi colectivo">Taxi / Taxi colectivo</option>
+        <option value="Vehiculo particular">Vehículo particular</option>
+        <option value="No cambio de medio">No cambió de medio</option>
+        <option value="Otro">Otro</option>
+      </select>
+      <input type="text" id="p9-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el medio anterior">
+    </div>
+
+    <!-- BLOQUE RAMIFICADO: Se oculta automáticamente si P9 == "No cambio de medio" -->
+    <div id="bloque-cambio-medio">
+      <div class="q-block">
+        <label class="q-title" for="p10">10. ¿Por qué cambió de medio de transporte? <span class="req">*</span></label>
+        <select id="p10" onchange="toggleOtro('p10', 'p10-otro')">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Tiempo de Viaje">Tiempo de Viaje</option>
+          <option value="Costo">Costo</option>
+          <option value="Accesibilidad">Accesibilidad</option>
+          <option value="Frecuencia">Frecuencia</option>
+          <option value="Seguridad">Seguridad</option>
+          <option value="Comodidad">Comodidad</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="p10-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo del cambio">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p11">11. ¿En qué año aproximadamente decidió cambiar su medio de transporte habitual? <span class="req">*</span></label>
+        <select id="p11">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Antes del 2023">Antes del 2023</option>
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="validarSec3()">Siguiente &rarr;</button>
+  </div>
+
+  <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P12 - P17) -->
+  <div id="sec-4" class="hidden">
+    <span class="badge">Sección 4 de 5 · Viaje actual en bus</span>
+    <h2>Viaje actual en bus</h2>
+    <p class="desc">Estas preguntas son respecto a su viaje actual o que realizará en unos momentos.</p>
+    <div id="err-4" class="alert">Por favor complete todos los tiempos (minutos &ge; 0), la tarifa (&gt; 0), motivo y frecuencia.</div>
+
+    <div class="grid-2">
+      <div class="q-block">
+        <label class="q-title" for="p12">12. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
+        <input type="number" id="p12" min="0" max="120" step="1" placeholder="Ej. 5">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p13">13. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
+        <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 8">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p14">14. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
+        <input type="number" id="p14" min="1" max="240" step="1" placeholder="Ej. 25">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p15">15. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
+        <input type="number" id="p15" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p16">16. Motivo principal del viaje <span class="req">*</span></label>
+        <select id="p16" onchange="toggleOtro('p16', 'p16-otro')">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Estudios">Estudios</option>
+          <option value="Trabajo">Trabajo</option>
+          <option value="Salud">Salud</option>
+          <option value="Compras">Compras</option>
+          <option value="Paseo">Paseo</option>
+          <option value="Otro">Otro</option>
+        </select>
+        <input type="text" id="p16-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
+      </div>
+
+      <div class="q-block">
+        <label class="q-title" for="p17">17. Frecuencia de uso del bus <span class="req">*</span></label>
+        <select id="p17">
+          <option value="">Seleccione su respuesta...</option>
+          <option value="Todos los dias">Todos los días</option>
+          <option value="3 - 5 veces por semana">3 - 5 veces por semana</option>
+          <option value="1 - 2 veces por semana">1 - 2 veces por semana</option>
+          <option value="Ocasionalmente">Ocasionalmente</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="iniciarSP()">Continuar a los 9 escenarios &rarr;</button>
+  </div>
+
+  <!-- SECCIÓN 5: ENCUESTAS DECLARADAS PIVOTADAS (9 ESCENARIOS L27) -->
+  <div id="sec-5" class="hidden">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <span class="badge" id="card-counter">Situación 1 de 9</span>
+    <h2>Encuestas declaradas: Planteo de situación</h2>
+    <p class="desc">
+      Imagine que debe hacer el <strong>MISMO viaje habitual</strong> que acaba de describir. Le presentaré 9 situaciones con tres opciones. En cada una, elija la que usaría. Todas las opciones llevan al mismo destino.<br>
+      <strong>SIT:</strong> sistema integrado de buses; con un solo pago puede cambiar de bus dentro de un tiempo límite (los tiempos del SIT ya incluyen el cambio de bus). <strong>Mototaxi:</strong> servicio que toma en la esquina.
+    </p>
+
+    <table class="sp-table">
+      <thead>
+        <tr>
+          <th>Atributo</th>
+          <th>Bus<br><small>(Variación de hoy)</small></th>
+          <th>SIT<br><small>(Sistema Integrado)</small></th>
+          <th>Mototaxi</th>
+        </tr>
+      </thead>
+      <tbody id="sp-tbody"></tbody>
+    </table>
+
+    <div id="err-5" class="alert">Seleccione una de las tres alternativas para continuar.</div>
+    <button class="btn" id="btn-next" onclick="siguienteEscenario()">Siguiente situación &rarr;</button>
+  </div>
+
+  <!-- FINALIZACIÓN / NO CONSENTIMIENTO -->
+  <div id="sec-done" class="hidden">
+    <span class="badge">Encuesta finalizada</span>
+    <h1 id="done-title">¡Muchas gracias por su participación!</h1>
+    <p class="desc" id="done-desc">Sus respuestas han sido registradas correctamente para nuestra investigación sobre el transporte público en Piura.</p>
+    <div id="sync-status" class="status-box status-ok">Guardando respuestas en Google Sheets...</div>
+    <button id="btn-csv" class="btn" style="background: #4b5563; margin-top: 14px;" onclick="descargarCSV()">Descargar respaldo local (.CSV)</button>
+  </div>
+
+</div>
+
+<script>
+// URL de tu Google Apps Script conectada
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Mllf2YscC24EzqMaUa3jakvIhx-NrsNSMV7asumzb0sHY8YkMw9J65C3r13V0a_HYw/exec";
+
+// Diseño Ortogonal L27 exacto (3 bloques de 9 escenarios)
+const DISENO_L27 = [
+  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":15,"tarifa":10.0}},
+  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":12,"tarifa":12.0}},
+  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":10,"tarifa":8.0}},
+  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":12,"tarifa":12.0}},
+  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":15,"tarifa":10.0}},
+  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":10,"tarifa":8.0}},
+  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":10,"tarifa":8.0}},
+  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":15,"tarifa":10.0}},
+  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":12,"tarifa":12.0}},
+  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":10,"tarifa":12.0}},
+  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":15,"tarifa":8.0}},
+  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":10,"tarifa":12.0}},
+  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":10,"tarifa":12.0}},
+  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":15,"tarifa":8.0}},
+  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":12,"tarifa":10.0}},
+  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":12,"tarifa":10.0}},
+  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":15,"tarifa":8.0}},
+  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":12,"tarifa":10.0}},
+  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":10,"tarifa":10.0}},
+  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":12,"tarifa":8.0}},
+  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":15,"tarifa":12.0}},
+  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":15,"tarifa":12.0}},
+  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":10,"tarifa":10.0}},
+  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":10,"tarifa":10.0}},
+  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":12,"tarifa":8.0}},
+  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":12,"tarifa":8.0}},
+  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":15,"tarifa":12.0}}
+];
+
+let estado = {
+  respondentId: 'RESP_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+  timestamp: new Date().toISOString(),
+  datos: {},
+  rp: {},
+  bloque: 1,
+  tarjetas: [],
+  indiceActual: 0,
+  resultados: []
+};
+
+function toggleOtro(selectId, inputId) {
+  const val = document.getElementById(selectId).value;
+  const inp = document.getElementById(inputId);
+  if (val === "Otro") inp.classList.remove("hidden");
+  else { inp.classList.add("hidden"); inp.value = ""; }
+}
+
+function obtenerValorConOtro(selectId, inputId) {
+  const val = document.getElementById(selectId).value;
+  if (val === "Otro") {
+    const txt = document.getElementById(inputId).value.trim();
+    return txt ? "Otro: " + txt : "";
+  }
+  return val;
+}
+
+function manejarRamificacionP9() {
+  toggleOtro('p9', 'p9-otro');
+  const p9Val = document.getElementById('p9').value;
+  const bloqueCambio = document.getElementById('bloque-cambio-medio');
+  if (p9Val === "No cambio de medio") {
+    bloqueCambio.classList.add("hidden");
+  } else {
+    bloqueCambio.classList.remove("hidden");
+  }
+}
+
+function mostrarSeccion(id) {
+  ['sec-1', 'sec-2', 'sec-3', 'sec-4', 'sec-5', 'sec-done'].forEach(s => {
+    document.getElementById(s).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function validarSec1() {
+  const sel = document.querySelector('input[name="p1"]:checked');
+  if (!sel) {
+    document.getElementById('err-1').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-1').style.display = 'none';
+  if (sel.value === "No acepto") {
+    document.getElementById('done-title').textContent = "Encuesta finalizada";
+    document.getElementById('done-desc').textContent = "Agradecemos su tiempo. No se ha registrado ningún dato.";
+    document.getElementById('sync-status').classList.add('hidden');
+    document.getElementById('btn-csv').classList.add('hidden');
+    mostrarSeccion('sec-done');
+    return;
+  }
+  mostrarSeccion('sec-2');
+}
+
+function validarSec2() {
+  const p2 = document.getElementById('p2').value;
+  const p3 = document.getElementById('p3').value;
+  const p4 = obtenerValorConOtro('p4', 'p4-otro');
+  const p5 = document.getElementById('p5').value;
+  const p6 = obtenerValorConOtro('p6', 'p6-otro');
+  const p7 = document.getElementById('p7').value;
+
+  if (!p2 || !p3 || !p4 || !p6 || !p7) {
+    document.getElementById('err-2').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-2').style.display = 'none';
+  Object.assign(estado.datos, { P2_Genero: p2, P3_Edad: p3, P4_Ocupacion: p4, P5_Ingreso: p5, P6_Ruta: p6, P7_Franja: p7 });
+  mostrarSeccion('sec-3');
+}
+
+function validarSec3() {
+  const p8 = obtenerValorConOtro('p8', 'p8-otro');
+  const p9 = obtenerValorConOtro('p9', 'p9-otro');
+  const noCambio = document.getElementById('p9').value === "No cambio de medio";
+  const p10 = noCambio ? "No aplica" : obtenerValorConOtro('p10', 'p10-otro');
+  const p11 = noCambio ? "No aplica" : document.getElementById('p11').value;
+
+  if (!p8 || !p9 || (!noCambio && (!p10 || !p11))) {
+    document.getElementById('err-3').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-3').style.display = 'none';
+  Object.assign(estado.datos, { P8_Medio_Actual: p8, P9_Medio_Anterior: p9, P10_Motivo_Cambio: p10, P11_Anio_Cambio: p11 });
+  mostrarSeccion('sec-4');
+}
+
+function pivotarTiempo(base, pct) {
+  if (pct === 0) return Math.round(base);
+  if (base <= 2) return Math.max(0, Math.round(base + (pct > 0 ? 1 : -1)));
+  return Math.max(1, Math.round(base * (1 + pct)));
+}
+
+function pivotarTarifa(base, pct) {
+  if (pct === 0) return Number(base.toFixed(2));
+  return Math.max(0.5, Math.round(base * (1 + pct) * 10) / 10);
+}
+
+function etiquetaDelta(pct) {
+  if (pct === 0) return '(igual que hoy)';
+  return pct > 0 ? `(+${Math.round(pct * 100)}%)` : `(${Math.round(pct * 100)}%)`;
+}
+
+function iniciarSP() {
+  const p12 = parseFloat(document.getElementById('p12').value);
+  const p13 = parseFloat(document.getElementById('p13').value);
+  const p14 = parseFloat(document.getElementById('p14').value);
+  const p15 = parseFloat(document.getElementById('p15').value);
+  const p16 = obtenerValorConOtro('p16', 'p16-otro');
+  const p17 = document.getElementById('p17').value;
+
+  if (isNaN(p12) || isNaN(p13) || isNaN(p14) || isNaN(p15) || p12 < 0 || p13 < 0 || p14 <= 0 || p15 <= 0 || !p16 || !p17) {
+    document.getElementById('err-4').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-4').style.display = 'none';
+
+  estado.rp = { acceso: p12, espera: p13, abordo: p14, tarifa: p15 };
+  Object.assign(estado.datos, { P16_Motivo_Viaje: p16, P17_Frecuencia_Bus: p17 });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramBloque = parseInt(urlParams.get('bloque'));
+  estado.bloque = [1, 2, 3].includes(paramBloque) ? paramBloque : (Math.floor(Math.random() * 3) + 1);
+
+  const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque);
+  estado.tarjetas = delBloque.sort(() => Math.random() - 0.5);
+  estado.indiceActual = 0;
+  estado.resultados = [];
+
+  mostrarSeccion('sec-5');
+  renderizarTarjeta();
+}
+
+function renderizarTarjeta() {
+  const idx = estado.indiceActual;
+  const card = estado.tarjetas[idx];
+  document.getElementById('card-counter').textContent = `Situación ${idx + 1} de 9`;
+  document.getElementById('progress-fill').style.width = `${(idx / 9) * 100}%`;
+  document.getElementById('btn-next').textContent = idx === 8 ? 'Finalizar y enviar encuesta ✓' : 'Siguiente situación →';
+
+  const busAcc = pivotarTiempo(estado.rp.acceso, card.bus.acceso);
+  const busEsp = pivotarTiempo(estado.rp.espera, card.bus.espera);
+  const busAbo = pivotarTiempo(estado.rp.abordo, card.bus.abordo);
+  const busTar = pivotarTarifa(estado.rp.tarifa, card.bus.tarifa);
+
+  card.calculado = { busAcc, busEsp, busAbo, busTar };
+
+  document.getElementById('sp-tbody').innerHTML = `
+    <tr>
+      <td>Caminata hasta paradero</td>
+      <td><strong>${busAcc} min</strong><span class="delta">${etiquetaDelta(card.bus.acceso)}</span></td>
+      <td><strong>${card.sit.acceso} min</strong></td>
+      <td><strong>${card.moto.acceso} min</strong></td>
+    </tr>
+    <tr>
+      <td>Tiempo de espera</td>
+      <td><strong>${busEsp} min</strong><span class="delta">${etiquetaDelta(card.bus.espera)}</span></td>
+      <td><strong>${card.sit.espera} min</strong></td>
+      <td><strong>${card.moto.espera} min</strong></td>
+    </tr>
+    <tr>
+      <td>Tiempo a bordo</td>
+      <td><strong>${busAbo} min</strong><span class="delta">${etiquetaDelta(card.bus.abordo)}</span></td>
+      <td><strong>${card.sit.abordo} min</strong></td>
+      <td><strong>${card.moto.abordo} min</strong></td>
+    </tr>
+    <tr>
+      <td>Tarifa del viaje</td>
+      <td><strong>S/ ${busTar.toFixed(2)}</strong><span class="delta">${etiquetaDelta(card.bus.tarifa)}</span></td>
+      <td><strong>S/ ${card.sit.tarifa.toFixed(2)}</strong></td>
+      <td><strong>S/ ${card.moto.tarifa.toFixed(2)}</strong></td>
+    </tr>
+    <tr class="choice-row">
+      <td>¿Cuál elegiría?</td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="1">Bus</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="2">SIT</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="3">Mototaxi</label></td>
+    </tr>
+  `;
+}
+
+function siguienteEscenario() {
+  const seleccionado = document.querySelector('input[name="choice"]:checked');
+  if (!seleccionado) {
+    document.getElementById('err-5').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-5').style.display = 'none';
+
+  const card = estado.tarjetas[estado.indiceActual];
+  estado.resultados.push({
+    ID_Encuestado: estado.respondentId,
+    Fecha_Hora: estado.timestamp,
+    ...estado.datos,
+    P18_Bloque: estado.bloque,
+    Orden_Presentacion: estado.indiceActual + 1,
+    Escenario_L27: card.escenario,
+    P12_RP_Bus_Acc: estado.rp.acceso,
+    P13_RP_Bus_Esp: estado.rp.espera,
+    P14_RP_Bus_Abo: estado.rp.abordo,
+    P15_RP_Bus_Tar: estado.rp.tarifa,
+    Bus_Acc: card.calculado.busAcc,
+    Bus_Esp: card.calculado.busEsp,
+    Bus_Abo: card.calculado.busAbo,
+    Bus_Tar: card.calculado.busTar,
+    SIT_Acc: card.sit.acceso,
+    SIT_Esp: card.sit.espera,
+    SIT_Abo: card.sit.abordo,
+    SIT_Tar: card.sit.tarifa,
+    Moto_Acc: card.moto.acceso,
+    Moto_Esp: card.moto.espera,
+    Moto_Abo: card.moto.abordo,
+    Moto_Tar: card.moto.tarifa,
+    CHOICE: parseInt(seleccionado.value)
+  });
+
+  estado.indiceActual++;
+  if (estado.indiceActual < 9) {
+    renderizarTarjeta();
+  } else {
+    mostrarSeccion('sec-done');
+    enviarAGoogleSheets();
+  }
+}
+
+function enviarAGoogleSheets() {
+  const box = document.getElementById('sync-status');
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filas: estado.resultados })
+  })
+  .then(() => {
+    box.className = "status-box status-ok";
+    box.textContent = "✓ Respuestas guardadas correctamente en Google Sheets.";
+  })
+  .catch(() => {
+    box.className = "status-box status-err";
+    box.textContent = "Error de conexión al enviar. Por favor descargue el respaldo CSV.";
+  });
+}
+
+function descargarCSV() {
+  const headers = Object.keys(estado.resultados[0]);
+  const rows = estado.resultados.map(r => headers.map(h => `"${r[h]}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `${estado.respondentId}_SP_Piura.csv`;
+  link.click();
+}
+</script>
+</body>
+</html>
