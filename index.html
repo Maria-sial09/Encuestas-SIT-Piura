@@ -119,8 +119,38 @@
   .radio-opt:hover { background: #f9fafb; border-color: #e5e7eb; }
   .radio-opt input[type="radio"] { transform: scale(1.15); cursor: pointer; }
   .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-  .btn { background: var(--primary); color: #fff; border: none; padding: 13px 20px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+
+  /* FILA DE BOTONES ATRÁS / SIGUIENTE */
+  .nav-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 13px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 2;
+  }
   .btn:hover { opacity: 0.92; }
+  .btn-back {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid var(--border);
+    padding: 13px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    flex: 1;
+  }
+  .btn-back:hover { background: #e5e7eb; }
+
   .progress-bar { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
   .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
   .badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; }
@@ -185,7 +215,10 @@
           </div>
         </div>
         <div id="err-1" class="alert">Por favor seleccione una opción para continuar.</div>
-        <button class="btn" onclick="validarSec1()">Continuar &rarr;</button>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="volverPortada()">&larr; Atrás</button>
+          <button type="button" class="btn" onclick="validarSec1()">Continuar &rarr;</button>
+        </div>
       </div>
 
       <!-- SECCIÓN 2: DATOS GENERALES (P2 - P7) -->
@@ -272,7 +305,10 @@
           </div>
         </div>
 
-        <button class="btn" onclick="validarSec2()">Siguiente &rarr;</button>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="mostrarSeccion('sec-1')">&larr; Atrás</button>
+          <button type="button" class="btn" onclick="validarSec2()">Siguiente &rarr;</button>
+        </div>
       </div>
 
       <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P11) -->
@@ -341,7 +377,10 @@
           </div>
         </div>
 
-        <button class="btn" onclick="validarSec3()">Siguiente &rarr;</button>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="mostrarSeccion('sec-2')">&larr; Atrás</button>
+          <button type="button" class="btn" onclick="validarSec3()">Siguiente &rarr;</button>
+        </div>
       </div>
 
       <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P12 - P17) -->
@@ -398,7 +437,10 @@
           </div>
         </div>
 
-        <button class="btn" onclick="iniciarSP()">Continuar a los 9 escenarios &rarr;</button>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="mostrarSeccion('sec-3')">&larr; Atrás</button>
+          <button type="button" class="btn" onclick="iniciarSP()">Continuar a los 9 escenarios &rarr;</button>
+        </div>
       </div>
 
       <!-- SECCIÓN 5: ENCUESTAS DECLARADAS PIVOTADAS (9 ESCENARIOS L27) -->
@@ -424,7 +466,10 @@
         </table>
 
         <div id="err-5" class="alert">Seleccione una de las tres alternativas para continuar.</div>
-        <button class="btn" id="btn-next" onclick="siguienteEscenario()">Siguiente situación &rarr;</button>
+        <div class="nav-row">
+          <button type="button" class="btn-back" onclick="anteriorEscenario()">&larr; Atrás</button>
+          <button type="button" class="btn" id="btn-next" onclick="siguienteEscenario()">Siguiente situación &rarr;</button>
+        </div>
       </div>
 
       <!-- FINALIZACIÓN / NO CONSENTIMIENTO -->
@@ -494,6 +539,12 @@ let estado = {
 function iniciarEncuesta() {
   document.getElementById('sec-welcome').classList.add('hidden');
   document.getElementById('survey-main').classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function volverPortada() {
+  document.getElementById('survey-main').classList.add('hidden');
+  document.getElementById('sec-welcome').classList.remove('hidden');
   window.scrollTo(0, 0);
 }
 
@@ -623,7 +674,7 @@ function iniciarSP() {
   const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque);
   estado.tarjetas = delBloque.sort(() => Math.random() - 0.5);
   estado.indiceActual = 0;
-  estado.resultados = [];
+  estado.resultados = new Array(9).fill(null);
 
   mostrarSeccion('sec-5');
   renderizarTarjeta();
@@ -632,6 +683,9 @@ function iniciarSP() {
 function renderizarTarjeta() {
   const idx = estado.indiceActual;
   const card = estado.tarjetas[idx];
+  const previa = estado.resultados[idx] ? estado.resultados[idx].CHOICE : null;
+
+  document.getElementById('err-5').style.display = 'none';
   document.getElementById('card-counter').textContent = `Situación ${idx + 1} de 9`;
   document.getElementById('progress-fill').style.width = `${(idx / 9) * 100}%`;
   document.getElementById('btn-next').textContent = idx === 8 ? 'Finalizar y enviar encuesta ✓' : 'Siguiente situación →';
@@ -670,11 +724,21 @@ function renderizarTarjeta() {
     </tr>
     <tr class="choice-row">
       <td>¿Cuál elegiría?</td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="1">Bus</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="2">SIT</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="3">Mototaxi</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="1" ${previa === 1 ? 'checked' : ''}>Bus</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="2" ${previa === 2 ? 'checked' : ''}>SIT</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="3" ${previa === 3 ? 'checked' : ''}>Mototaxi</label></td>
     </tr>
   `;
+}
+
+function anteriorEscenario() {
+  document.getElementById('err-5').style.display = 'none';
+  if (estado.indiceActual > 0) {
+    estado.indiceActual--;
+    renderizarTarjeta();
+  } else {
+    mostrarSeccion('sec-4');
+  }
 }
 
 function siguienteEscenario() {
@@ -686,7 +750,7 @@ function siguienteEscenario() {
   document.getElementById('err-5').style.display = 'none';
 
   const card = estado.tarjetas[estado.indiceActual];
-  estado.resultados.push({
+  estado.resultados[estado.indiceActual] = {
     ID_Encuestado: estado.respondentId,
     Fecha_Hora: estado.timestamp,
     ...estado.datos,
@@ -710,7 +774,7 @@ function siguienteEscenario() {
     Moto_Abo: card.moto.abordo,
     Moto_Tar: card.moto.tarifa,
     CHOICE: parseInt(seleccionado.value)
-  });
+  };
 
   estado.indiceActual++;
   if (estado.indiceActual < 9) {
