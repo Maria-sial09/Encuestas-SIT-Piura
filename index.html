@@ -311,7 +311,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P11) -->
+      <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P12) -->
       <div id="sec-3" class="hidden">
         <span class="badge">Sección 3 de 5 · Caracterización declarativa</span>
         <h2>Caracterización declarativa</h2>
@@ -319,36 +319,25 @@
         <div id="err-3" class="alert">Por favor responda todas las preguntas visibles antes de continuar.</div>
 
         <div class="q-block">
-          <label class="q-title" for="p8">8. ¿Qué medio de transporte utiliza con mayor frecuencia para sus viajes diarios? <span class="req">*</span></label>
-          <select id="p8" onchange="toggleOtro('p8', 'p8-otro')">
+          <label class="q-title" for="p8">8. ¿Es usted un usuario frecuente de bus de transporte público? <span class="req">*</span></label>
+          <select id="p8">
             <option value="">Seleccione su respuesta...</option>
-            <option value="Mototaxi">Mototaxi</option>
-            <option value="Motolineal">Motolineal</option>
-            <option value="Bus de Transporte publico">Bus de Transporte público</option>
-            <option value="Taxi / Taxi colectivo">Taxi / Taxi colectivo</option>
-            <option value="Vehiculo particular">Vehículo particular</option>
-            <option value="Otro">Otro</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
           </select>
-          <input type="text" id="p8-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el medio de transporte">
         </div>
 
         <div class="q-block">
-          <label class="q-title" for="p9">9. ¿Qué medio utilizaba con mayor frecuencia antes de este? <span class="req">*</span></label>
+          <label class="q-title" for="p9">9. ¿Previamente utilizó otro modo de transporte de manera frecuente? <span class="req">*</span></label>
           <select id="p9" onchange="manejarRamificacionP9()">
             <option value="">Seleccione su respuesta...</option>
-            <option value="Mototaxi">Mototaxi</option>
-            <option value="Motolineal">Motolineal</option>
-            <option value="Bus de Transporte publico">Bus de Transporte público</option>
-            <option value="Taxi / Taxi colectivo">Taxi / Taxi colectivo</option>
-            <option value="Vehiculo particular">Vehículo particular</option>
-            <option value="No cambio de medio">No cambió de medio</option>
-            <option value="Otro">Otro</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
           </select>
-          <input type="text" id="p9-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el medio anterior">
         </div>
 
-        <!-- BLOQUE RAMIFICADO: Se oculta automáticamente si P9 == "No cambio de medio" -->
-        <div id="bloque-cambio-medio">
+        <!-- BLOQUE RAMIFICADO: Se muestra si P9 == "Si" -->
+        <div id="bloque-cambio-medio" class="hidden">
           <div class="q-block">
             <label class="q-title" for="p10">10. ¿Por qué cambió de medio de transporte? <span class="req">*</span></label>
             <select id="p10" onchange="toggleOtro('p10', 'p10-otro')">
@@ -375,6 +364,15 @@
               <option value="2026">2026</option>
             </select>
           </div>
+
+          <div class="q-block">
+            <label class="q-title" for="p12">12. ¿Empezó a usar el bus antes o después de que comenzara a operar esta ruta? <span class="req">*</span></label>
+            <select id="p12">
+              <option value="">Seleccione su respuesta...</option>
+              <option value="Si">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
         </div>
 
         <div class="nav-row">
@@ -383,7 +381,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P12 - P17) -->
+      <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P13 - P18) -->
       <div id="sec-4" class="hidden">
         <span class="badge">Sección 4 de 5 · Viaje actual en bus</span>
         <h2>Viaje actual en bus</h2>
@@ -392,28 +390,28 @@
 
         <div class="grid-2">
           <div class="q-block">
-            <label class="q-title" for="p12">12. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
-            <input type="number" id="p12" min="0" max="120" step="1" placeholder="Ej. 5">
+            <label class="q-title" for="p13">13. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
+            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 5">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p13">13. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
-            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 8">
+            <label class="q-title" for="p14">14. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
+            <input type="number" id="p14" min="0" max="120" step="1" placeholder="Ej. 8">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p14">14. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
-            <input type="number" id="p14" min="1" max="240" step="1" placeholder="Ej. 25">
+            <label class="q-title" for="p15">15. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
+            <input type="number" id="p15" min="1" max="240" step="1" placeholder="Ej. 25">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p15">15. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
-            <input type="number" id="p15" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
+            <label class="q-title" for="p16">16. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
+            <input type="number" id="p16" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p16">16. Motivo principal del viaje <span class="req">*</span></label>
-            <select id="p16" onchange="toggleOtro('p16', 'p16-otro')">
+            <label class="q-title" for="p17">17. Motivo principal del viaje <span class="req">*</span></label>
+            <select id="p17" onchange="toggleOtro('p17', 'p17-otro')">
               <option value="">Seleccione su respuesta...</option>
               <option value="Estudios">Estudios</option>
               <option value="Trabajo">Trabajo</option>
@@ -422,17 +420,16 @@
               <option value="Paseo">Paseo</option>
               <option value="Otro">Otro</option>
             </select>
-            <input type="text" id="p16-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
+            <input type="text" id="p17-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p17">17. Frecuencia de uso del bus <span class="req">*</span></label>
-            <select id="p17">
+            <label class="q-title" for="p18">18. Frecuencia de uso del bus <span class="req">*</span></label>
+            <select id="p18">
               <option value="">Seleccione su respuesta...</option>
               <option value="Todos los dias">Todos los días</option>
               <option value="3 - 5 veces por semana">3 - 5 veces por semana</option>
               <option value="1 - 2 veces por semana">1 - 2 veces por semana</option>
-              <option value="Ocasionalmente">Ocasionalmente</option>
             </select>
           </div>
         </div>
@@ -565,13 +562,12 @@ function obtenerValorConOtro(selectId, inputId) {
 }
 
 function manejarRamificacionP9() {
-  toggleOtro('p9', 'p9-otro');
   const p9Val = document.getElementById('p9').value;
   const bloqueCambio = document.getElementById('bloque-cambio-medio');
-  if (p9Val === "No cambio de medio") {
-    bloqueCambio.classList.add("hidden");
-  } else {
+  if (p9Val === "Si") {
     bloqueCambio.classList.remove("hidden");
+  } else {
+    bloqueCambio.classList.add("hidden");
   }
 }
 
@@ -619,18 +615,25 @@ function validarSec2() {
 }
 
 function validarSec3() {
-  const p8 = obtenerValorConOtro('p8', 'p8-otro');
-  const p9 = obtenerValorConOtro('p9', 'p9-otro');
-  const noCambio = document.getElementById('p9').value === "No cambio de medio";
-  const p10 = noCambio ? "No aplica" : obtenerValorConOtro('p10', 'p10-otro');
-  const p11 = noCambio ? "No aplica" : document.getElementById('p11').value;
+  const p8 = document.getElementById('p8').value;
+  const p9 = document.getElementById('p9').value;
+  const huboCambio = p9 === "Si";
+  const p10 = huboCambio ? obtenerValorConOtro('p10', 'p10-otro') : "No aplica";
+  const p11 = huboCambio ? document.getElementById('p11').value : "No aplica";
+  const p12 = huboCambio ? document.getElementById('p12').value : "No aplica";
 
-  if (!p8 || !p9 || (!noCambio && (!p10 || !p11))) {
+  if (!p8 || !p9 || (huboCambio && (!p10 || !p11 || !p12))) {
     document.getElementById('err-3').style.display = 'block';
     return;
   }
   document.getElementById('err-3').style.display = 'none';
-  Object.assign(estado.datos, { P8_Medio_Actual: p8, P9_Medio_Anterior: p9, P10_Motivo_Cambio: p10, P11_Anio_Cambio: p11 });
+  Object.assign(estado.datos, {
+    P8_Usuario_Frecuente_Bus: p8,
+    P9_Uso_Previo_Otro_Modo: p9,
+    P10_Motivo_Cambio: p10,
+    P11_Anio_Cambio: p11,
+    P12_Inicio_Antes_Despues_Ruta: p12
+  });
   mostrarSeccion('sec-4');
 }
 
@@ -651,21 +654,21 @@ function etiquetaDelta(pct) {
 }
 
 function iniciarSP() {
-  const p12 = parseFloat(document.getElementById('p12').value);
   const p13 = parseFloat(document.getElementById('p13').value);
   const p14 = parseFloat(document.getElementById('p14').value);
   const p15 = parseFloat(document.getElementById('p15').value);
-  const p16 = obtenerValorConOtro('p16', 'p16-otro');
-  const p17 = document.getElementById('p17').value;
+  const p16 = parseFloat(document.getElementById('p16').value);
+  const p17 = obtenerValorConOtro('p17', 'p17-otro');
+  const p18 = document.getElementById('p18').value;
 
-  if (isNaN(p12) || isNaN(p13) || isNaN(p14) || isNaN(p15) || p12 < 0 || p13 < 0 || p14 <= 0 || p15 <= 0 || !p16 || !p17) {
+  if (isNaN(p13) || isNaN(p14) || isNaN(p15) || isNaN(p16) || p13 < 0 || p14 < 0 || p15 <= 0 || p16 <= 0 || !p17 || !p18) {
     document.getElementById('err-4').style.display = 'block';
     return;
   }
   document.getElementById('err-4').style.display = 'none';
 
-  estado.rp = { acceso: p12, espera: p13, abordo: p14, tarifa: p15 };
-  Object.assign(estado.datos, { P16_Motivo_Viaje: p16, P17_Frecuencia_Bus: p17 });
+  estado.rp = { acceso: p13, espera: p14, abordo: p15, tarifa: p16 };
+  Object.assign(estado.datos, { P17_Motivo_Viaje: p17, P18_Frecuencia_Bus: p18 });
 
   const urlParams = new URLSearchParams(window.location.search);
   const paramBloque = parseInt(urlParams.get('bloque'));
@@ -754,13 +757,13 @@ function siguienteEscenario() {
     ID_Encuestado: estado.respondentId,
     Fecha_Hora: estado.timestamp,
     ...estado.datos,
-    P18_Bloque: estado.bloque,
+    P19_Bloque: estado.bloque,
     Orden_Presentacion: estado.indiceActual + 1,
     Escenario_L27: card.escenario,
-    P12_RP_Bus_Acc: estado.rp.acceso,
-    P13_RP_Bus_Esp: estado.rp.espera,
-    P14_RP_Bus_Abo: estado.rp.abordo,
-    P15_RP_Bus_Tar: estado.rp.tarifa,
+    P13_RP_Bus_Acc: estado.rp.acceso,
+    P14_RP_Bus_Esp: estado.rp.espera,
+    P15_RP_Bus_Abo: estado.rp.abordo,
+    P16_RP_Bus_Tar: estado.rp.tarifa,
     Bus_Acc: card.calculado.busAcc,
     Bus_Esp: card.calculado.busEsp,
     Bus_Abo: card.calculado.busAbo,
