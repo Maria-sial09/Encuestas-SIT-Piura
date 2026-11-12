@@ -491,42 +491,50 @@
 // URL de tu Google Apps Script conectada
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Mllf2YscC24EzqMaUa3jakvIhx-NrsNSMV7asumzb0sHY8YkMw9J65C3r13V0a_HYw/exec";
 
-// Diseño Ortogonal L27 exacto (3 bloques de 9 escenarios)
+// Diseño Ortogonal L27 exacto (Diseno_SP_L27_2.xlsx: pivotado completo + tarifa mototaxi por tramo)
 const DISENO_L27 = [
-  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":15,"tarifa":10.0}},
-  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":12,"tarifa":12.0}},
-  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":10,"tarifa":8.0}},
-  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":12,"tarifa":12.0}},
-  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":15,"tarifa":10.0}},
-  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":10,"tarifa":8.0}},
-  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":10,"tarifa":8.0}},
-  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":15,"tarifa":10.0}},
-  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":12,"tarifa":12.0}},
-  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":10,"tarifa":12.0}},
-  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":15,"tarifa":8.0}},
-  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":10,"tarifa":12.0}},
-  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":10,"tarifa":12.0}},
-  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":15,"tarifa":8.0}},
-  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":12,"tarifa":10.0}},
-  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":12,"tarifa":10.0}},
-  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":15,"tarifa":8.0}},
-  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":12,"tarifa":10.0}},
-  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":10,"espera":6,"abordo":20,"tarifa":2.5},"moto":{"acceso":3,"espera":1,"abordo":10,"tarifa":10.0}},
-  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":10,"espera":8,"abordo":15,"tarifa":2.0},"moto":{"acceso":3,"espera":3,"abordo":12,"tarifa":8.0}},
-  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":4,"espera":6,"abordo":15,"tarifa":2.5},"moto":{"acceso":2,"espera":3,"abordo":15,"tarifa":12.0}},
-  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":6,"espera":8,"abordo":20,"tarifa":2.0},"moto":{"acceso":1,"espera":1,"abordo":15,"tarifa":12.0}},
-  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":4,"espera":8,"abordo":30,"tarifa":2.0},"moto":{"acceso":2,"espera":5,"abordo":10,"tarifa":10.0}},
-  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":6,"espera":12,"abordo":15,"tarifa":3.0},"moto":{"acceso":1,"espera":3,"abordo":10,"tarifa":10.0}},
-  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":6,"espera":6,"abordo":30,"tarifa":2.5},"moto":{"acceso":1,"espera":5,"abordo":12,"tarifa":8.0}},
-  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":4,"espera":12,"abordo":20,"tarifa":3.0},"moto":{"acceso":2,"espera":1,"abordo":12,"tarifa":8.0}},
-  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":10,"espera":12,"abordo":30,"tarifa":3.0},"moto":{"acceso":3,"espera":5,"abordo":15,"tarifa":12.0}}
+  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.25,"tarifaNivel":1}},
+  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.4,"tarifaNivel":2}},
+  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.5,"tarifaNivel":0}},
+  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.4,"tarifaNivel":2}},
+  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.25,"tarifaNivel":1}},
+  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.5,"tarifaNivel":0}},
+  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.5,"tarifaNivel":0}},
+  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.25,"tarifaNivel":1}},
+  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.4,"tarifaNivel":2}},
+  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.5,"tarifaNivel":2}},
+  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.25,"tarifaNivel":0}},
+  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.5,"tarifaNivel":2}},
+  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.5,"tarifaNivel":2}},
+  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.25,"tarifaNivel":0}},
+  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.4,"tarifaNivel":1}},
+  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.4,"tarifaNivel":1}},
+  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.25,"tarifaNivel":0}},
+  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.4,"tarifaNivel":1}},
+  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.5,"tarifaNivel":1}},
+  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.4,"tarifaNivel":0}},
+  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.25,"tarifaNivel":2}},
+  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.25,"tarifaNivel":2}},
+  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.5,"tarifaNivel":1}},
+  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.5,"tarifaNivel":1}},
+  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.4,"tarifaNivel":0}},
+  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.4,"tarifaNivel":0}},
+  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.25,"tarifaNivel":2}}
 ];
+
+// Tabla de tarifas de mototaxi según tramo (hoja Niveles)
+const TARIFAS_MOTO_TRAMO = {
+  "Corto": [4.0, 4.5, 5.0],
+  "Medio": [8.0, 10.0, 12.0],
+  "Largo": [12.0, 13.5, 15.0]
+};
 
 let estado = {
   respondentId: 'RESP_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
   timestamp: new Date().toISOString(),
   datos: {},
   rp: {},
+  tramo: "Medio",
   bloque: 1,
   tarjetas: [],
   indiceActual: 0,
@@ -637,15 +645,20 @@ function validarSec3() {
   mostrarSeccion('sec-4');
 }
 
-function pivotarTiempo(base, pct) {
-  if (pct === 0) return Math.round(base);
-  if (base <= 2) return Math.max(0, Math.round(base + (pct > 0 ? 1 : -1)));
+// Fórmula exacta de Calculadora: MAX(1, ROUND(base * (1 + pct), 0))
+function pivotarTiempoCalc(base, pct) {
   return Math.max(1, Math.round(base * (1 + pct)));
 }
 
-function pivotarTarifa(base, pct) {
-  if (pct === 0) return Number(base.toFixed(2));
-  return Math.max(0.5, Math.round(base * (1 + pct) * 10) / 10);
+// Fórmula exacta de Calculadora: ROUND(base * (1 + pct) * 20, 0) / 20
+function pivotarTarifaCalc(base, pct) {
+  return Math.round(base * (1 + pct) * 20) / 20;
+}
+
+function obtenerTramo(minutosAbordo) {
+  if (minutosAbordo < 15) return "Corto";
+  if (minutosAbordo <= 30) return "Medio";
+  return "Largo";
 }
 
 function etiquetaDelta(pct) {
@@ -668,6 +681,7 @@ function iniciarSP() {
   document.getElementById('err-4').style.display = 'none';
 
   estado.rp = { acceso: p13, espera: p14, abordo: p15, tarifa: p16 };
+  estado.tramo = obtenerTramo(p15);
   Object.assign(estado.datos, { P17_Motivo_Viaje: p17, P18_Frecuencia_Bus: p18 });
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -693,37 +707,54 @@ function renderizarTarjeta() {
   document.getElementById('progress-fill').style.width = `${(idx / 9) * 100}%`;
   document.getElementById('btn-next').textContent = idx === 8 ? 'Finalizar y enviar encuesta ✓' : 'Siguiente situación →';
 
-  const busAcc = pivotarTiempo(estado.rp.acceso, card.bus.acceso);
-  const busEsp = pivotarTiempo(estado.rp.espera, card.bus.espera);
-  const busAbo = pivotarTiempo(estado.rp.abordo, card.bus.abordo);
-  const busTar = pivotarTarifa(estado.rp.tarifa, card.bus.tarifa);
+  // Bus pivotado
+  const busAcc = pivotarTiempoCalc(estado.rp.acceso, card.bus.acceso);
+  const busEsp = pivotarTiempoCalc(estado.rp.espera, card.bus.espera);
+  const busAbo = pivotarTiempoCalc(estado.rp.abordo, card.bus.abordo);
+  const busTar = pivotarTarifaCalc(estado.rp.tarifa, card.bus.tarifa);
 
-  card.calculado = { busAcc, busEsp, busAbo, busTar };
+  // SIT pivotado
+  const sitAcc = pivotarTiempoCalc(estado.rp.acceso, card.sit.acceso);
+  const sitEsp = pivotarTiempoCalc(estado.rp.espera, card.sit.espera);
+  const sitAbo = pivotarTiempoCalc(estado.rp.abordo, card.sit.abordo);
+  const sitTar = pivotarTarifaCalc(estado.rp.tarifa, card.sit.tarifa);
+
+  // Mototaxi pivotado en tiempos + tarifa por tramo
+  const motoAcc = pivotarTiempoCalc(estado.rp.acceso, card.moto.acceso);
+  const motoEsp = pivotarTiempoCalc(estado.rp.espera, card.moto.espera);
+  const motoAbo = pivotarTiempoCalc(estado.rp.abordo, card.moto.abordo);
+  const motoTar = TARIFAS_MOTO_TRAMO[estado.tramo][card.moto.tarifaNivel];
+
+  card.calculado = {
+    busAcc, busEsp, busAbo, busTar,
+    sitAcc, sitEsp, sitAbo, sitTar,
+    motoAcc, motoEsp, motoAbo, motoTar
+  };
 
   document.getElementById('sp-tbody').innerHTML = `
     <tr>
       <td>Caminata hasta paradero</td>
       <td><strong>${busAcc} min</strong><span class="delta">${etiquetaDelta(card.bus.acceso)}</span></td>
-      <td><strong>${card.sit.acceso} min</strong></td>
-      <td><strong>${card.moto.acceso} min</strong></td>
+      <td><strong>${sitAcc} min</strong><span class="delta">${etiquetaDelta(card.sit.acceso)}</span></td>
+      <td><strong>${motoAcc} min</strong><span class="delta">${etiquetaDelta(card.moto.acceso)}</span></td>
     </tr>
     <tr>
       <td>Tiempo de espera</td>
       <td><strong>${busEsp} min</strong><span class="delta">${etiquetaDelta(card.bus.espera)}</span></td>
-      <td><strong>${card.sit.espera} min</strong></td>
-      <td><strong>${card.moto.espera} min</strong></td>
+      <td><strong>${sitEsp} min</strong><span class="delta">${etiquetaDelta(card.sit.espera)}</span></td>
+      <td><strong>${motoEsp} min</strong><span class="delta">${etiquetaDelta(card.moto.espera)}</span></td>
     </tr>
     <tr>
       <td>Tiempo a bordo</td>
       <td><strong>${busAbo} min</strong><span class="delta">${etiquetaDelta(card.bus.abordo)}</span></td>
-      <td><strong>${card.sit.abordo} min</strong></td>
-      <td><strong>${card.moto.abordo} min</strong></td>
+      <td><strong>${sitAbo} min</strong><span class="delta">${etiquetaDelta(card.sit.abordo)}</span></td>
+      <td><strong>${motoAbo} min</strong><span class="delta">${etiquetaDelta(card.moto.abordo)}</span></td>
     </tr>
     <tr>
       <td>Tarifa del viaje</td>
       <td><strong>S/ ${busTar.toFixed(2)}</strong><span class="delta">${etiquetaDelta(card.bus.tarifa)}</span></td>
-      <td><strong>S/ ${card.sit.tarifa.toFixed(2)}</strong></td>
-      <td><strong>S/ ${card.moto.tarifa.toFixed(2)}</strong></td>
+      <td><strong>S/ ${sitTar.toFixed(2)}</strong><span class="delta">${etiquetaDelta(card.sit.tarifa)}</span></td>
+      <td><strong>S/ ${motoTar.toFixed(2)}</strong><span class="delta">(tramo ${estado.tramo.toLowerCase()})</span></td>
     </tr>
     <tr class="choice-row">
       <td>¿Cuál elegiría?</td>
@@ -753,10 +784,13 @@ function siguienteEscenario() {
   document.getElementById('err-5').style.display = 'none';
 
   const card = estado.tarjetas[estado.indiceActual];
+  const c = card.calculado;
+
   estado.resultados[estado.indiceActual] = {
     ID_Encuestado: estado.respondentId,
     Fecha_Hora: estado.timestamp,
     ...estado.datos,
+    Tramo_Viaje: estado.tramo,
     P19_Bloque: estado.bloque,
     Orden_Presentacion: estado.indiceActual + 1,
     Escenario_L27: card.escenario,
@@ -764,18 +798,18 @@ function siguienteEscenario() {
     P14_RP_Bus_Esp: estado.rp.espera,
     P15_RP_Bus_Abo: estado.rp.abordo,
     P16_RP_Bus_Tar: estado.rp.tarifa,
-    Bus_Acc: card.calculado.busAcc,
-    Bus_Esp: card.calculado.busEsp,
-    Bus_Abo: card.calculado.busAbo,
-    Bus_Tar: card.calculado.busTar,
-    SIT_Acc: card.sit.acceso,
-    SIT_Esp: card.sit.espera,
-    SIT_Abo: card.sit.abordo,
-    SIT_Tar: card.sit.tarifa,
-    Moto_Acc: card.moto.acceso,
-    Moto_Esp: card.moto.espera,
-    Moto_Abo: card.moto.abordo,
-    Moto_Tar: card.moto.tarifa,
+    Bus_Acc: c.busAcc,
+    Bus_Esp: c.busEsp,
+    Bus_Abo: c.busAbo,
+    Bus_Tar: c.busTar,
+    SIT_Acc: c.sitAcc,
+    SIT_Esp: c.sitEsp,
+    SIT_Abo: c.sitAbo,
+    SIT_Tar: c.sitTar,
+    Moto_Acc: c.motoAcc,
+    Moto_Esp: c.motoEsp,
+    Moto_Abo: c.motoAbo,
+    Moto_Tar: c.motoTar,
     CHOICE: parseInt(seleccionado.value)
   };
 
