@@ -436,17 +436,17 @@
 
         <div class="nav-row">
           <button type="button" class="btn-back" onclick="mostrarSeccion('sec-3')">&larr; Atrás</button>
-          <button type="button" class="btn" onclick="iniciarSP()">Continuar a los 9 escenarios &rarr;</button>
+          <button type="button" class="btn" onclick="iniciarSP()">Continuar a los escenarios &rarr;</button>
         </div>
       </div>
 
-      <!-- SECCIÓN 5: ENCUESTAS DECLARADAS PIVOTADAS (9 ESCENARIOS L27) -->
+      <!-- SECCIÓN 5: ENCUESTAS DECLARADAS PIVOTADAS (9 ESCENARIOS L27 + 1 CONTROL DE PLAUSIBILIDAD) -->
       <div id="sec-5" class="hidden">
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <span class="badge" id="card-counter">Situación 1 de 9</span>
+        <span class="badge" id="card-counter">Situación 1 de 10</span>
         <h2>Encuestas declaradas: Planteo de situación</h2>
         <p class="desc">
-          Imagine que debe hacer el <strong>MISMO viaje habitual</strong> que acaba de describir. Le presentaré 9 situaciones con tres opciones. En cada una, elija la que usaría. Todas las opciones llevan al mismo destino.<br>
+          Imagine que debe hacer el <strong>MISMO viaje habitual</strong> que acaba de describir. Le presentaré 10 situaciones con tres opciones. En cada una, elija la que usaría. Todas las opciones llevan al mismo destino.<br>
           <strong>SIT:</strong> sistema integrado de buses; con un solo pago puede cambiar de bus dentro de un tiempo límite (los tiempos del SIT ya incluyen el cambio de bus). <strong>Mototaxi:</strong> servicio que toma en la esquina.
         </p>
 
@@ -491,42 +491,57 @@
 // URL de tu Google Apps Script conectada
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Mllf2YscC24EzqMaUa3jakvIhx-NrsNSMV7asumzb0sHY8YkMw9J65C3r13V0a_HYw/exec";
 
-// Diseño Ortogonal L27 exacto (Diseno_SP_L27_2.xlsx: pivotado completo + tarifa mototaxi por tramo)
+// Diseño Ortogonal L27 exacto (Diseno_SP_L27_2.xlsx: tarifa absoluta Bus ±S/0.50, Mototaxi tiempo y tarifa por tramo)
 const DISENO_L27 = [
-  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.25,"tarifaNivel":1}},
-  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.4,"tarifaNivel":2}},
-  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.5,"tarifaNivel":0}},
-  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.4,"tarifaNivel":2}},
-  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.25,"tarifaNivel":1}},
-  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.5,"tarifaNivel":0}},
-  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.5,"tarifaNivel":0}},
-  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.25,"tarifaNivel":1}},
-  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.4,"tarifaNivel":2}},
-  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.5,"tarifaNivel":2}},
-  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.25,"tarifaNivel":0}},
-  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.5,"tarifaNivel":2}},
-  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.5,"tarifaNivel":2}},
-  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.25,"tarifaNivel":0}},
-  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.4,"tarifaNivel":1}},
-  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.4,"tarifaNivel":1}},
-  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.25,"tarifaNivel":0}},
-  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.4,"tarifaNivel":1}},
-  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifa":0.0},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordo":-0.5,"tarifaNivel":1}},
-  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifa":0.2},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordo":-0.4,"tarifaNivel":0}},
-  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifa":0.0},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordo":-0.25,"tarifaNivel":2}},
-  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifa":0.2},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordo":-0.25,"tarifaNivel":2}},
-  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifa":0.2},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordo":-0.5,"tarifaNivel":1}},
-  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifa":-0.2},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordo":-0.5,"tarifaNivel":1}},
-  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifa":0.0},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordo":-0.4,"tarifaNivel":0}},
-  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifa":-0.2},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordo":-0.4,"tarifaNivel":0}},
-  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifa":-0.2},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordo":-0.25,"tarifaNivel":2}}
+  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":2,"tarifaNivel":2}},
+  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":2,"tarifaNivel":2}},
+  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":2,"tarifaNivel":2}}
 ];
 
-// Tabla de tarifas de mototaxi según tramo (hoja Niveles)
+// Escenario 10 – Control de plausibilidad (Bus = exactamente RP actual; SIT y Mototaxi en nivel medio)
+const ESCENARIO_CONTROL = {
+  escenario: 10,
+  esControl: true,
+  bus: { acceso: 0.0, espera: 0.0, abordo: 0.0, tarifaDelta: 0.0 },
+  sit: { acceso: 0.2, espera: 0.35, abordo: 0.0, tarifa: 0.25 },
+  moto: { acceso: -0.6, espera: -0.5, abordoNivel: 1, tarifaNivel: 1 }
+};
+
+// Tablas de Mototaxi según tramo (hoja Niveles: nivel 0 = bajo, 1 = medio, 2 = alto)
 const TARIFAS_MOTO_TRAMO = {
   "Corto": [4.0, 4.5, 5.0],
   "Medio": [8.0, 10.0, 12.0],
   "Largo": [12.0, 13.5, 15.0]
+};
+
+const TIEMPO_ABORDO_MOTO_TRAMO = {
+  "Corto": [5, 7, 10],
+  "Medio": [10, 12, 15],
+  "Largo": [20, 25, 30]
 };
 
 let estado = {
@@ -645,14 +660,19 @@ function validarSec3() {
   mostrarSeccion('sec-4');
 }
 
-// Fórmula exacta de Calculadora: MAX(1, ROUND(base * (1 + pct), 0))
+// Fórmula exacta Calculadora: MAX(1, ROUND(base * (1 + pct), 0))
 function pivotarTiempoCalc(base, pct) {
   return Math.max(1, Math.round(base * (1 + pct)));
 }
 
-// Fórmula exacta de Calculadora: ROUND(base * (1 + pct) * 20, 0) / 20
-function pivotarTarifaCalc(base, pct) {
-  return Math.round(base * (1 + pct) * 20) / 20;
+// Fórmula exacta Calculadora Bus Tarifa: MAX(0.5, base + delta)
+function pivotarTarifaBus(base, delta) {
+  return Math.max(0.5, Math.round((base + delta) * 100) / 100);
+}
+
+// Fórmula exacta Calculadora SIT Tarifa: ROUND(base * (1 + pct) * 2, 0) / 2
+function pivotarTarifaSIT(base, pct) {
+  return Math.round(base * (1 + pct) * 2) / 2;
 }
 
 function obtenerTramo(minutosAbordo) {
@@ -661,9 +681,14 @@ function obtenerTramo(minutosAbordo) {
   return "Largo";
 }
 
-function etiquetaDelta(pct) {
+function etiquetaDeltaPct(pct) {
   if (pct === 0) return '(igual que hoy)';
   return pct > 0 ? `(+${Math.round(pct * 100)}%)` : `(${Math.round(pct * 100)}%)`;
+}
+
+function etiquetaDeltaSoles(delta) {
+  if (delta === 0) return '(igual que hoy)';
+  return delta > 0 ? `(+S/ ${delta.toFixed(2)})` : `(−S/ ${Math.abs(delta).toFixed(2)})`;
 }
 
 function iniciarSP() {
@@ -688,10 +713,12 @@ function iniciarSP() {
   const paramBloque = parseInt(urlParams.get('bloque'));
   estado.bloque = [1, 2, 3].includes(paramBloque) ? paramBloque : (Math.floor(Math.random() * 3) + 1);
 
-  const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque);
-  estado.tarjetas = delBloque.sort(() => Math.random() - 0.5);
+  // Aleatorizar los 9 escenarios del bloque + añadir al final el Escenario 10 de Control de Plausibilidad
+  const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque).map(d => ({ ...d, esControl: false }));
+  const aleatorios = delBloque.sort(() => Math.random() - 0.5);
+  estado.tarjetas = [...aleatorios, { ...ESCENARIO_CONTROL, bloque: estado.bloque }];
   estado.indiceActual = 0;
-  estado.resultados = new Array(9).fill(null);
+  estado.resultados = new Array(estado.tarjetas.length).fill(null);
 
   mostrarSeccion('sec-5');
   renderizarTarjeta();
@@ -699,30 +726,31 @@ function iniciarSP() {
 
 function renderizarTarjeta() {
   const idx = estado.indiceActual;
+  const total = estado.tarjetas.length;
   const card = estado.tarjetas[idx];
   const previa = estado.resultados[idx] ? estado.resultados[idx].CHOICE : null;
 
   document.getElementById('err-5').style.display = 'none';
-  document.getElementById('card-counter').textContent = `Situación ${idx + 1} de 9`;
-  document.getElementById('progress-fill').style.width = `${(idx / 9) * 100}%`;
-  document.getElementById('btn-next').textContent = idx === 8 ? 'Finalizar y enviar encuesta ✓' : 'Siguiente situación →';
+  document.getElementById('card-counter').textContent = `Situación ${idx + 1} de ${total}`;
+  document.getElementById('progress-fill').style.width = `${(idx / total) * 100}%`;
+  document.getElementById('btn-next').textContent = idx === total - 1 ? 'Finalizar y enviar encuesta ✓' : 'Siguiente situación →';
 
-  // Bus pivotado
-  const busAcc = pivotarTiempoCalc(estado.rp.acceso, card.bus.acceso);
-  const busEsp = pivotarTiempoCalc(estado.rp.espera, card.bus.espera);
-  const busAbo = pivotarTiempoCalc(estado.rp.abordo, card.bus.abordo);
-  const busTar = pivotarTarifaCalc(estado.rp.tarifa, card.bus.tarifa);
+  // Bus: tiempos pivotados %, tarifa absoluta ±S/0.50 (en control es exactamente RP)
+  const busAcc = card.esControl ? Math.round(estado.rp.acceso) : pivotarTiempoCalc(estado.rp.acceso, card.bus.acceso);
+  const busEsp = card.esControl ? Math.round(estado.rp.espera) : pivotarTiempoCalc(estado.rp.espera, card.bus.espera);
+  const busAbo = card.esControl ? Math.round(estado.rp.abordo) : pivotarTiempoCalc(estado.rp.abordo, card.bus.abordo);
+  const busTar = card.esControl ? estado.rp.tarifa : pivotarTarifaBus(estado.rp.tarifa, card.bus.tarifaDelta);
 
-  // SIT pivotado
+  // SIT: tiempos pivotados %, tarifa pivotada % redondeada a S/0.50
   const sitAcc = pivotarTiempoCalc(estado.rp.acceso, card.sit.acceso);
   const sitEsp = pivotarTiempoCalc(estado.rp.espera, card.sit.espera);
   const sitAbo = pivotarTiempoCalc(estado.rp.abordo, card.sit.abordo);
-  const sitTar = pivotarTarifaCalc(estado.rp.tarifa, card.sit.tarifa);
+  const sitTar = pivotarTarifaSIT(estado.rp.tarifa, card.sit.tarifa);
 
-  // Mototaxi pivotado en tiempos + tarifa por tramo
+  // Mototaxi: acceso/espera pivotados %, tiempo a bordo y tarifa por tramo
   const motoAcc = pivotarTiempoCalc(estado.rp.acceso, card.moto.acceso);
   const motoEsp = pivotarTiempoCalc(estado.rp.espera, card.moto.espera);
-  const motoAbo = pivotarTiempoCalc(estado.rp.abordo, card.moto.abordo);
+  const motoAbo = TIEMPO_ABORDO_MOTO_TRAMO[estado.tramo][card.moto.abordoNivel];
   const motoTar = TARIFAS_MOTO_TRAMO[estado.tramo][card.moto.tarifaNivel];
 
   card.calculado = {
@@ -734,26 +762,26 @@ function renderizarTarjeta() {
   document.getElementById('sp-tbody').innerHTML = `
     <tr>
       <td>Caminata hasta paradero</td>
-      <td><strong>${busAcc} min</strong><span class="delta">${etiquetaDelta(card.bus.acceso)}</span></td>
-      <td><strong>${sitAcc} min</strong><span class="delta">${etiquetaDelta(card.sit.acceso)}</span></td>
-      <td><strong>${motoAcc} min</strong><span class="delta">${etiquetaDelta(card.moto.acceso)}</span></td>
+      <td><strong>${busAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.acceso)}</span></td>
+      <td><strong>${sitAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.acceso)}</span></td>
+      <td><strong>${motoAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.moto.acceso)}</span></td>
     </tr>
     <tr>
       <td>Tiempo de espera</td>
-      <td><strong>${busEsp} min</strong><span class="delta">${etiquetaDelta(card.bus.espera)}</span></td>
-      <td><strong>${sitEsp} min</strong><span class="delta">${etiquetaDelta(card.sit.espera)}</span></td>
-      <td><strong>${motoEsp} min</strong><span class="delta">${etiquetaDelta(card.moto.espera)}</span></td>
+      <td><strong>${busEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.espera)}</span></td>
+      <td><strong>${sitEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.espera)}</span></td>
+      <td><strong>${motoEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.moto.espera)}</span></td>
     </tr>
     <tr>
       <td>Tiempo a bordo</td>
-      <td><strong>${busAbo} min</strong><span class="delta">${etiquetaDelta(card.bus.abordo)}</span></td>
-      <td><strong>${sitAbo} min</strong><span class="delta">${etiquetaDelta(card.sit.abordo)}</span></td>
-      <td><strong>${motoAbo} min</strong><span class="delta">${etiquetaDelta(card.moto.abordo)}</span></td>
+      <td><strong>${busAbo} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.abordo)}</span></td>
+      <td><strong>${sitAbo} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.abordo)}</span></td>
+      <td><strong>${motoAbo} min</strong><span class="delta">(tramo ${estado.tramo.toLowerCase()})</span></td>
     </tr>
     <tr>
       <td>Tarifa del viaje</td>
-      <td><strong>S/ ${busTar.toFixed(2)}</strong><span class="delta">${etiquetaDelta(card.bus.tarifa)}</span></td>
-      <td><strong>S/ ${sitTar.toFixed(2)}</strong><span class="delta">${etiquetaDelta(card.sit.tarifa)}</span></td>
+      <td><strong>S/ ${busTar.toFixed(2)}</strong><span class="delta">${etiquetaDeltaSoles(card.bus.tarifaDelta)}</span></td>
+      <td><strong>S/ ${sitTar.toFixed(2)}</strong><span class="delta">${etiquetaDeltaPct(card.sit.tarifa)}</span></td>
       <td><strong>S/ ${motoTar.toFixed(2)}</strong><span class="delta">(tramo ${estado.tramo.toLowerCase()})</span></td>
     </tr>
     <tr class="choice-row">
@@ -794,6 +822,7 @@ function siguienteEscenario() {
     P19_Bloque: estado.bloque,
     Orden_Presentacion: estado.indiceActual + 1,
     Escenario_L27: card.escenario,
+    Es_Control_Plausibilidad: card.esControl ? "Si" : "No",
     P13_RP_Bus_Acc: estado.rp.acceso,
     P14_RP_Bus_Esp: estado.rp.espera,
     P15_RP_Bus_Abo: estado.rp.abordo,
@@ -814,7 +843,7 @@ function siguienteEscenario() {
   };
 
   estado.indiceActual++;
-  if (estado.indiceActual < 9) {
+  if (estado.indiceActual < estado.tarjetas.length) {
     renderizarTarjeta();
   } else {
     mostrarSeccion('sec-done');
