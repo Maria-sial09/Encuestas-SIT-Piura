@@ -370,7 +370,7 @@
             <select id="p12">
               <option value="">Seleccione su respuesta...</option>
               <option value="Antes">Antes</option>
-              <option value="Después">Despues</option>
+              <option value="Despues">Después</option>
             </select>
           </div>
         </div>
@@ -491,43 +491,43 @@
 // URL de tu Google Apps Script conectada
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Mllf2YscC24EzqMaUa3jakvIhx-NrsNSMV7asumzb0sHY8YkMw9J65C3r13V0a_HYw/exec";
 
-// Diseño Ortogonal L27 exacto (Diseno_SP_L27_2.xlsx: tarifa absoluta Bus ±S/0.50, Mototaxi tiempo y tarifa por tramo)
+// Diseño Ortogonal L27 exacto (Diseno_SP_L27 (1).xlsx - versión piloto 1)
 const DISENO_L27 = [
-  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":2,"tarifaNivel":1}},
-  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":1,"tarifaNivel":2}},
-  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":0,"tarifaNivel":0}},
-  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":1,"tarifaNivel":2}},
-  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":2,"tarifaNivel":1}},
-  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":0,"tarifaNivel":0}},
-  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":0,"tarifaNivel":0}},
-  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":2,"tarifaNivel":1}},
-  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":1,"tarifaNivel":2}},
-  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":0,"tarifaNivel":2}},
-  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":2,"tarifaNivel":0}},
-  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":0,"tarifaNivel":2}},
-  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":0,"tarifaNivel":2}},
-  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":2,"tarifaNivel":0}},
-  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":1,"tarifaNivel":1}},
-  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":1,"tarifaNivel":1}},
-  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":2,"tarifaNivel":0}},
-  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":1,"tarifaNivel":1}},
-  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":0.0,"abordo":0.0,"tarifa":0.25},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":0,"tarifaNivel":1}},
-  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":1,"tarifaNivel":0}},
-  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":0.0,"abordo":-0.25,"tarifa":0.25},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":2,"tarifaNivel":2}},
-  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":2,"tarifaNivel":2}},
-  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":0,"tarifaNivel":1}},
-  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":1.0,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":0,"tarifaNivel":1}},
-  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":0.0,"abordo":0.5,"tarifa":0.25},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":1,"tarifaNivel":0}},
-  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":1.0,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":1,"tarifaNivel":0}},
-  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":1.0,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":2,"tarifaNivel":2}}
+  {"bloque":1,"escenario":1,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":2,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":-0.2,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":1,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":-0.2,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":4,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":-0.4,"abordo":0.0,"tarifa":-0.25},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":1,"escenario":5,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":-0.2,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":6,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":-0.4,"abordo":-0.25,"tarifa":-0.25},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":7,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":0,"tarifaNivel":0}},
+  {"bloque":1,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":-0.4,"abordo":0.5,"tarifa":-0.25},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":2,"tarifaNivel":1}},
+  {"bloque":1,"escenario":9,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":1,"tarifaNivel":2}},
+  {"bloque":2,"escenario":1,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":-0.2,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":2,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":-0.2,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":3,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.0,"tarifa":-0.25},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":4,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":-0.4,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":0,"tarifaNivel":2}},
+  {"bloque":2,"escenario":5,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":0.35,"abordo":-0.25,"tarifa":-0.25},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":6,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":0.35,"abordo":0.5,"tarifa":-0.25},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":2,"escenario":7,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":-0.2,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":2,"escenario":8,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":-0.4,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":2,"tarifaNivel":0}},
+  {"bloque":2,"escenario":9,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":-0.4,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":1,"tarifaNivel":1}},
+  {"bloque":3,"escenario":1,"bus":{"acceso":0.0,"espera":0.2,"abordo":-0.2,"tarifaDelta":0.0},"sit":{"acceso":1.0,"espera":-0.4,"abordo":0.0,"tarifa":0.0},"moto":{"acceso":-0.4,"espera":-0.8,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":2,"bus":{"acceso":0.2,"espera":0.0,"abordo":-0.2,"tarifaDelta":0.5},"sit":{"acceso":1.0,"espera":-0.2,"abordo":-0.25,"tarifa":-0.25},"moto":{"acceso":-0.4,"espera":-0.5,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":3,"bus":{"acceso":-0.2,"espera":0.0,"abordo":0.0,"tarifaDelta":0.0},"sit":{"acceso":-0.2,"espera":-0.4,"abordo":-0.25,"tarifa":0.0},"moto":{"acceso":-0.6,"espera":-0.5,"abordoNivel":2,"tarifaNivel":2}},
+  {"bloque":3,"escenario":4,"bus":{"acceso":-0.2,"espera":0.2,"abordo":0.2,"tarifaDelta":0.5},"sit":{"acceso":0.2,"espera":-0.2,"abordo":0.0,"tarifa":-0.25},"moto":{"acceso":-0.8,"espera":-0.8,"abordoNivel":2,"tarifaNivel":2}},
+  {"bloque":3,"escenario":5,"bus":{"acceso":0.0,"espera":-0.2,"abordo":0.0,"tarifaDelta":0.5},"sit":{"acceso":-0.2,"espera":-0.2,"abordo":0.5,"tarifa":-0.25},"moto":{"acceso":-0.6,"espera":-0.15,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":6,"bus":{"acceso":0.0,"espera":0.0,"abordo":0.2,"tarifaDelta":-0.5},"sit":{"acceso":0.2,"espera":0.35,"abordo":-0.25,"tarifa":0.5},"moto":{"acceso":-0.8,"espera":-0.5,"abordoNivel":0,"tarifaNivel":1}},
+  {"bloque":3,"escenario":7,"bus":{"acceso":0.2,"espera":-0.2,"abordo":0.2,"tarifaDelta":0.0},"sit":{"acceso":0.2,"espera":-0.4,"abordo":0.5,"tarifa":0.0},"moto":{"acceso":-0.8,"espera":-0.15,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":8,"bus":{"acceso":0.2,"espera":0.2,"abordo":0.0,"tarifaDelta":-0.5},"sit":{"acceso":-0.2,"espera":0.35,"abordo":0.0,"tarifa":0.5},"moto":{"acceso":-0.6,"espera":-0.8,"abordoNivel":1,"tarifaNivel":0}},
+  {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":2,"tarifaNivel":2}}
 ];
 
-// Escenario 10 – Control de plausibilidad (Bus = exactamente RP actual; SIT y Mototaxi en nivel medio)
+// Escenario 10 – Control de plausibilidad (Bus = RP actual; SIT en nivel conservador [Nivel 3]; Mototaxi en nivel medio [Nivel 2])
 const ESCENARIO_CONTROL = {
   escenario: 10,
   esControl: true,
   bus: { acceso: 0.0, espera: 0.0, abordo: 0.0, tarifaDelta: 0.0 },
-  sit: { acceso: 0.2, espera: 0.35, abordo: 0.0, tarifa: 0.25 },
+  sit: { acceso: 1.0, espera: 0.35, abordo: 0.5, tarifa: 0.5 },
   moto: { acceso: -0.6, espera: -0.5, abordoNivel: 1, tarifaNivel: 1 }
 };
 
