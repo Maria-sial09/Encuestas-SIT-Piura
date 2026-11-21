@@ -311,7 +311,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P12) -->
+      <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P11) -->
       <div id="sec-3" class="hidden">
         <span class="badge">Sección 3 de 5 · Caracterización declarativa</span>
         <h2>Caracterización declarativa</h2>
@@ -361,7 +361,7 @@
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p11">11. ¿En qué año aproximadamente decidió cambiar su medio de transporte habitual? <span class="req">*</span></label>
+            <label class="q-title" for="p11">11. ¿En qué año empezó a usar el bus para este viaje? <span class="req">*</span></label>
             <select id="p11">
               <option value="">Seleccione su respuesta...</option>
               <option value="Antes del 2023">Antes del 2023</option>
@@ -369,15 +369,7 @@
               <option value="2024">2024</option>
               <option value="2025">2025</option>
               <option value="2026">2026</option>
-            </select>
-          </div>
-
-          <div class="q-block">
-            <label class="q-title" for="p12">12. ¿Empezó a usar el bus antes o después de que comenzara a operar esta ruta? <span class="req">*</span></label>
-            <select id="p12">
-              <option value="">Seleccione su respuesta...</option>
-              <option value="Antes">Antes</option>
-              <option value="Despues">Después</option>
+              <option value="No recuerdo">No recuerdo</option>
             </select>
           </div>
         </div>
@@ -388,7 +380,7 @@
         </div>
       </div>
 
-      <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P13 - P18) -->
+      <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P12 - P17) -->
       <div id="sec-4" class="hidden">
         <span class="badge">Sección 4 de 5 · Viaje actual en bus</span>
         <h2>Viaje actual en bus</h2>
@@ -397,28 +389,28 @@
 
         <div class="grid-2">
           <div class="q-block">
-            <label class="q-title" for="p13">13. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
-            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 5">
+            <label class="q-title" for="p12">12. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
+            <input type="number" id="p12" min="0" max="120" step="1" placeholder="Ej. 5">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p14">14. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
-            <input type="number" id="p14" min="0" max="120" step="1" placeholder="Ej. 8">
+            <label class="q-title" for="p13">13. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
+            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 8">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p15">15. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
-            <input type="number" id="p15" min="1" max="240" step="1" placeholder="Ej. 25">
+            <label class="q-title" for="p14">14. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
+            <input type="number" id="p14" min="1" max="240" step="1" placeholder="Ej. 25">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p16">16. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
-            <input type="number" id="p16" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
+            <label class="q-title" for="p15">15. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
+            <input type="number" id="p15" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p17">17. Motivo principal del viaje <span class="req">*</span></label>
-            <select id="p17" onchange="toggleOtro('p17', 'p17-otro')">
+            <label class="q-title" for="p16">16. Motivo principal del viaje <span class="req">*</span></label>
+            <select id="p16" onchange="toggleOtro('p16', 'p16-otro')">
               <option value="">Seleccione su respuesta...</option>
               <option value="Estudios">Estudios</option>
               <option value="Trabajo">Trabajo</option>
@@ -427,12 +419,12 @@
               <option value="Paseo">Paseo</option>
               <option value="Otro">Otro</option>
             </select>
-            <input type="text" id="p17-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
+            <input type="text" id="p16-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
           </div>
 
           <div class="q-block">
-            <label class="q-title" for="p18">18. Frecuencia de uso del bus <span class="req">*</span></label>
-            <select id="p18">
+            <label class="q-title" for="p17">17. Frecuencia de uso del bus <span class="req">*</span></label>
+            <select id="p17">
               <option value="">Seleccione su respuesta...</option>
               <option value="Todos los dias">Todos los días</option>
               <option value="3 - 5 veces por semana">3 - 5 veces por semana</option>
@@ -654,19 +646,17 @@ function validarSec3() {
   const huboCambio = p9Raw !== "" && p9Raw !== OPCION_NINGUNO_P9;
   const p10 = huboCambio ? obtenerValorConOtro('p10', 'p10-otro') : "No aplica";
   const p11 = huboCambio ? document.getElementById('p11').value : "No aplica";
-  const p12 = huboCambio ? document.getElementById('p12').value : "No aplica";
 
-  if (!p8 || !p9 || (huboCambio && (!p10 || !p11 || !p12))) {
+  if (!p8 || !p9 || (huboCambio && (!p10 || !p11))) {
     document.getElementById('err-3').style.display = 'block';
     return;
   }
   document.getElementById('err-3').style.display = 'none';
   Object.assign(estado.datos, {
     P8_Usuario_Frecuente_Bus: p8,
-    P9_Uso_Previo_Otro_Modo: p9,
+    P9_Modo_Previo: p9,
     P10_Motivo_Cambio: p10,
-    P11_Anio_Cambio: p11,
-    P12_Inicio_Antes_Despues_Ruta: p12
+    P11_Anio_Inicio_Bus: p11
   });
   mostrarSeccion('sec-4');
 }
@@ -703,22 +693,22 @@ function etiquetaDeltaSoles(delta) {
 }
 
 function iniciarSP() {
+  const p12 = parseFloat(document.getElementById('p12').value);
   const p13 = parseFloat(document.getElementById('p13').value);
   const p14 = parseFloat(document.getElementById('p14').value);
   const p15 = parseFloat(document.getElementById('p15').value);
-  const p16 = parseFloat(document.getElementById('p16').value);
-  const p17 = obtenerValorConOtro('p17', 'p17-otro');
-  const p18 = document.getElementById('p18').value;
+  const p16 = obtenerValorConOtro('p16', 'p16-otro');
+  const p17 = document.getElementById('p17').value;
 
-  if (isNaN(p13) || isNaN(p14) || isNaN(p15) || isNaN(p16) || p13 < 0 || p14 < 0 || p15 <= 0 || p16 <= 0 || !p17 || !p18) {
+  if (isNaN(p12) || isNaN(p13) || isNaN(p14) || isNaN(p15) || p12 < 0 || p13 < 0 || p14 <= 0 || p15 <= 0 || !p16 || !p17) {
     document.getElementById('err-4').style.display = 'block';
     return;
   }
   document.getElementById('err-4').style.display = 'none';
 
-  estado.rp = { acceso: p13, espera: p14, abordo: p15, tarifa: p16 };
-  estado.tramo = obtenerTramo(p15);
-  Object.assign(estado.datos, { P17_Motivo_Viaje: p17, P18_Frecuencia_Bus: p18 });
+  estado.rp = { acceso: p12, espera: p13, abordo: p14, tarifa: p15 };
+  estado.tramo = obtenerTramo(p14);
+  Object.assign(estado.datos, { P16_Motivo_Viaje: p16, P17_Frecuencia_Bus: p17 });
 
   const urlParams = new URLSearchParams(window.location.search);
   const paramBloque = parseInt(urlParams.get('bloque'));
@@ -770,6 +760,7 @@ function renderizarTarjeta() {
     motoAcc, motoEsp, motoAbo, motoTar
   };
 
+  // Orden visual de columnas: Bus (1), SIT (3), Mototaxi (2) — los value de CHOICE siguen tu script: 1=Bus, 2=Mototaxi, 3=SIT
   document.getElementById('sp-tbody').innerHTML = `
     <tr>
       <td>Caminata hasta paradero</td>
@@ -798,8 +789,8 @@ function renderizarTarjeta() {
     <tr class="choice-row">
       <td>¿Cuál elegiría?</td>
       <td><label class="choice-label"><input type="radio" name="choice" value="1" ${previa === 1 ? 'checked' : ''}>Bus</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="2" ${previa === 2 ? 'checked' : ''}>SIT</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="3" ${previa === 3 ? 'checked' : ''}>Mototaxi</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="3" ${previa === 3 ? 'checked' : ''}>SIT</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="2" ${previa === 2 ? 'checked' : ''}>Mototaxi</label></td>
     </tr>
   `;
 }
@@ -830,26 +821,29 @@ function siguienteEscenario() {
     Fecha_Hora: estado.timestamp,
     ...estado.datos,
     Tramo_Viaje: estado.tramo,
-    P19_Bloque: estado.bloque,
+    P18_Bloque: estado.bloque,
     Orden_Presentacion: estado.indiceActual + 1,
     Escenario_L27: card.escenario,
     Es_Control_Plausibilidad: card.esControl ? "Si" : "No",
-    P13_RP_Bus_Acc: estado.rp.acceso,
-    P14_RP_Bus_Esp: estado.rp.espera,
-    P15_RP_Bus_Abo: estado.rp.abordo,
-    P16_RP_Bus_Tar: estado.rp.tarifa,
-    Bus_Acc: c.busAcc,
-    Bus_Esp: c.busEsp,
-    Bus_Abo: c.busAbo,
-    Bus_Tar: c.busTar,
-    SIT_Acc: c.sitAcc,
-    SIT_Esp: c.sitEsp,
-    SIT_Abo: c.sitAbo,
-    SIT_Tar: c.sitTar,
-    Moto_Acc: c.motoAcc,
-    Moto_Esp: c.motoEsp,
-    Moto_Abo: c.motoAbo,
-    Moto_Tar: c.motoTar,
+    P12_RP_BUS_TTC: estado.rp.acceso,
+    P13_RP_BUS_TTE: estado.rp.espera,
+    P14_RP_BUS_TTAB: estado.rp.abordo,
+    P15_RP_BUS_CO: estado.rp.tarifa,
+    BUS_AV: 1,
+    BUS_TTC: c.busAcc,
+    BUS_TTE: c.busEsp,
+    BUS_TTAB: c.busAbo,
+    BUS_CO: c.busTar,
+    MOTO_AV: 1,
+    MOTO_TTC: c.motoAcc,
+    MOTO_TTE: c.motoEsp,
+    MOTO_TTAB: c.motoAbo,
+    MOTO_CO: c.motoTar,
+    SIT_AV: 1,
+    SIT_TTC: c.sitAcc,
+    SIT_TTE: c.sitEsp,
+    SIT_TTAB: c.sitAbo,
+    SIT_CO: c.sitTar,
     CHOICE: parseInt(seleccionado.value)
   };
 
