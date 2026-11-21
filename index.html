@@ -328,15 +328,22 @@
         </div>
 
         <div class="q-block">
-          <label class="q-title" for="p9">9. ¿Previamente utilizó otro modo de transporte de manera frecuente? <span class="req">*</span></label>
+          <label class="q-title" for="p9">9. ¿Qué modo de transporte usaba de manera frecuente antes de usar el bus para este viaje? <span class="req">*</span></label>
           <select id="p9" onchange="manejarRamificacionP9()">
             <option value="">Seleccione su respuesta...</option>
-            <option value="Si">Sí</option>
-            <option value="No">No</option>
+            <option value="Auto particular">Auto particular</option>
+            <option value="Moto lineal">Moto lineal</option>
+            <option value="Mototaxi">Mototaxi</option>
+            <option value="Taxi colectivo">Taxi colectivo</option>
+            <option value="Taxi">Taxi</option>
+            <option value="A pie / bicicleta">A pie / bicicleta</option>
+            <option value="Otro">Otro (especificar)</option>
+            <option value="Ninguno, siempre usé el bus para este viaje">Ninguno, siempre usé el bus para este viaje</option>
           </select>
+          <input type="text" id="p9-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el modo de transporte anterior">
         </div>
 
-        <!-- BLOQUE RAMIFICADO: Se muestra si P9 == "Si" -->
+        <!-- BLOQUE RAMIFICADO: Se muestra si P9 != "" y P9 != "Ninguno, siempre usé el bus para este viaje" -->
         <div id="bloque-cambio-medio" class="hidden">
           <div class="q-block">
             <label class="q-title" for="p10">10. ¿Por qué cambió de medio de transporte? <span class="req">*</span></label>
@@ -544,6 +551,8 @@ const TIEMPO_ABORDO_MOTO_TRAMO = {
   "Largo": [20, 25, 30]
 };
 
+const OPCION_NINGUNO_P9 = "Ninguno, siempre usé el bus para este viaje";
+
 let estado = {
   respondentId: 'RESP_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
   timestamp: new Date().toISOString(),
@@ -585,9 +594,10 @@ function obtenerValorConOtro(selectId, inputId) {
 }
 
 function manejarRamificacionP9() {
+  toggleOtro('p9', 'p9-otro');
   const p9Val = document.getElementById('p9').value;
   const bloqueCambio = document.getElementById('bloque-cambio-medio');
-  if (p9Val === "Si") {
+  if (p9Val !== "" && p9Val !== OPCION_NINGUNO_P9) {
     bloqueCambio.classList.remove("hidden");
   } else {
     bloqueCambio.classList.add("hidden");
@@ -639,8 +649,9 @@ function validarSec2() {
 
 function validarSec3() {
   const p8 = document.getElementById('p8').value;
-  const p9 = document.getElementById('p9').value;
-  const huboCambio = p9 === "Si";
+  const p9Raw = document.getElementById('p9').value;
+  const p9 = obtenerValorConOtro('p9', 'p9-otro');
+  const huboCambio = p9Raw !== "" && p9Raw !== OPCION_NINGUNO_P9;
   const p10 = huboCambio ? obtenerValorConOtro('p10', 'p10-otro') : "No aplica";
   const p11 = huboCambio ? document.getElementById('p11').value : "No aplica";
   const p12 = huboCambio ? document.getElementById('p12').value : "No aplica";
