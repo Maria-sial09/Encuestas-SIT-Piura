@@ -154,11 +154,10 @@
   .progress-bar { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
   .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
   .badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; }
-  table.sp-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
-  table.sp-table th, table.sp-table td { border: 1px solid var(--border); padding: 9px 6px; text-align: center; }
+  table.sp-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.95rem; }
+  table.sp-table th, table.sp-table td { border: 1px solid var(--border); padding: 11px 8px; text-align: center; }
   table.sp-table th { background: var(--primary); color: #fff; }
   table.sp-table td:first-child { text-align: left; font-weight: 600; background: #f9fafb; }
-  .delta { display: block; font-size: 0.74rem; color: var(--muted); }
   .choice-row td { background: #f0fdf4; }
   .choice-label { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-weight: 700; color: var(--primary); padding: 4px; }
   .choice-label input { transform: scale(1.25); cursor: pointer; }
@@ -453,7 +452,7 @@
           <thead>
             <tr>
               <th>Atributo</th>
-              <th>Bus<br><small>(Variación de hoy)</small></th>
+              <th>Bus</th>
               <th>SIT<br><small>(Sistema Integrado)</small></th>
               <th>Mototaxi</th>
             </tr>
@@ -556,6 +555,15 @@ let estado = {
   indiceActual: 0,
   resultados: []
 };
+
+function barajarFisherYates(array) {
+  const copia = [...array];
+  for (let i = copia.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
 
 function iniciarEncuesta() {
   document.getElementById('sec-welcome').classList.add('hidden');
@@ -661,9 +669,13 @@ function validarSec3() {
   mostrarSeccion('sec-4');
 }
 
-// Fórmula exacta Calculadora: MAX(1, ROUND(base * (1 + pct), 0))
+// Pivoteo con variación mínima garantizada de ±1 min cuando pct != 0
 function pivotarTiempoCalc(base, pct) {
-  return Math.max(1, Math.round(base * (1 + pct)));
+  const b = Math.round(base);
+  let v = Math.max(1, Math.round(b * (1 + pct)));
+  if (pct > 0 && v <= b) v = b + 1;
+  if (pct < 0 && v >= b && b > 1) v = b - 1;
+  return v;
 }
 
 // Fórmula exacta Calculadora Bus Tarifa: MAX(0.5, base + delta)
@@ -680,16 +692,6 @@ function obtenerTramo(minutosAbordo) {
   if (minutosAbordo < 15) return "Corto";
   if (minutosAbordo <= 30) return "Medio";
   return "Largo";
-}
-
-function etiquetaDeltaPct(pct) {
-  if (pct === 0) return '(igual que hoy)';
-  return pct > 0 ? `(+${Math.round(pct * 100)}%)` : `(${Math.round(pct * 100)}%)`;
-}
-
-function etiquetaDeltaSoles(delta) {
-  if (delta === 0) return '(igual que hoy)';
-  return delta > 0 ? `(+S/ ${delta.toFixed(2)})` : `(−S/ ${Math.abs(delta).toFixed(2)})`;
 }
 
 function iniciarSP() {
@@ -714,9 +716,9 @@ function iniciarSP() {
   const paramBloque = parseInt(urlParams.get('bloque'));
   estado.bloque = [1, 2, 3].includes(paramBloque) ? paramBloque : (Math.floor(Math.random() * 3) + 1);
 
-  // Aleatorizar los 9 escenarios del bloque + añadir al final el Escenario 10 de Control de Plausibilidad
+  // Barajar los 9 escenarios del bloque con Fisher-Yates + añadir al final el Escenario 10 de Control de Plausibilidad
   const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque).map(d => ({ ...d, esControl: false }));
-  const aleatorios = delBloque.sort(() => Math.random() - 0.5);
+  const aleatorios = barajarFisherYates(delBloque);
   estado.tarjetas = [...aleatorios, { ...ESCENARIO_CONTROL, bloque: estado.bloque }];
   estado.indiceActual = 0;
   estado.resultados = new Array(estado.tarjetas.length).fill(null);
@@ -760,31 +762,31 @@ function renderizarTarjeta() {
     motoAcc, motoEsp, motoAbo, motoTar
   };
 
-  // Orden visual de columnas: Bus (1), SIT (3), Mototaxi (2) — los value de CHOICE siguen tu script: 1=Bus, 2=Mototaxi, 3=SIT
+  // Orden visual de columnas: Bus (1), SIT (3), Mototaxi (2) — solo valores puros de tiempo y tarifa
   document.getElementById('sp-tbody').innerHTML = `
     <tr>
       <td>Caminata hasta paradero</td>
-      <td><strong>${busAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.acceso)}</span></td>
-      <td><strong>${sitAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.acceso)}</span></td>
-      <td><strong>${motoAcc} min</strong><span class="delta">${etiquetaDeltaPct(card.moto.acceso)}</span></td>
+      <td><strong>${busAcc} min</strong></td>
+      <td><strong>${sitAcc} min</strong></td>
+      <td><strong>${motoAcc} min</strong></td>
     </tr>
     <tr>
       <td>Tiempo de espera</td>
-      <td><strong>${busEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.espera)}</span></td>
-      <td><strong>${sitEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.espera)}</span></td>
-      <td><strong>${motoEsp} min</strong><span class="delta">${etiquetaDeltaPct(card.moto.espera)}</span></td>
+      <td><strong>${busEsp} min</strong></td>
+      <td><strong>${sitEsp} min</strong></td>
+      <td><strong>${motoEsp} min</strong></td>
     </tr>
     <tr>
       <td>Tiempo a bordo</td>
-      <td><strong>${busAbo} min</strong><span class="delta">${etiquetaDeltaPct(card.bus.abordo)}</span></td>
-      <td><strong>${sitAbo} min</strong><span class="delta">${etiquetaDeltaPct(card.sit.abordo)}</span></td>
-      <td><strong>${motoAbo} min</strong><span class="delta">(tramo ${estado.tramo.toLowerCase()})</span></td>
+      <td><strong>${busAbo} min</strong></td>
+      <td><strong>${sitAbo} min</strong></td>
+      <td><strong>${motoAbo} min</strong></td>
     </tr>
     <tr>
       <td>Tarifa del viaje</td>
-      <td><strong>S/ ${busTar.toFixed(2)}</strong><span class="delta">${etiquetaDeltaSoles(card.bus.tarifaDelta)}</span></td>
-      <td><strong>S/ ${sitTar.toFixed(2)}</strong><span class="delta">${etiquetaDeltaPct(card.sit.tarifa)}</span></td>
-      <td><strong>S/ ${motoTar.toFixed(2)}</strong><span class="delta">(tramo ${estado.tramo.toLowerCase()})</span></td>
+      <td><strong>S/ ${busTar.toFixed(2)}</strong></td>
+      <td><strong>S/ ${sitTar.toFixed(2)}</strong></td>
+      <td><strong>S/ ${motoTar.toFixed(2)}</strong></td>
     </tr>
     <tr class="choice-row">
       <td>¿Cuál elegiría?</td>
