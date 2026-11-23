@@ -102,6 +102,17 @@
     transform: translateY(-2px);
     box-shadow: 0 10px 22px rgba(15, 76, 129, 0.42);
   }
+  .btn-secondary-hero {
+    margin-top: 10px;
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
 
   /* CONTENEDOR PRINCIPAL DE LAS SECCIONES DE ENCUESTA */
   .survey-wrapper { padding: 16px; }
@@ -153,7 +164,9 @@
 
   .progress-bar { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; margin-bottom: 14px; }
   .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
-  .badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; }
+  .top-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .badge { display: inline-block; background: var(--primary-light); color: var(--primary); font-weight: 700; font-size: 0.78rem; padding: 4px 10px; border-radius: 99px; }
+  .autosave-tag { font-size: 0.76rem; color: var(--accent); font-weight: 600; }
   table.sp-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.95rem; }
   table.sp-table th, table.sp-table td { border: 1px solid var(--border); padding: 11px 8px; text-align: center; }
   table.sp-table th { background: var(--primary); color: #fff; }
@@ -188,7 +201,13 @@
         <span class="pill">🔒 100 % Anónima</span>
         <span class="pill">🚌 Bus · SIT · Mototaxi</span>
       </div>
-      <button class="btn-hero" onclick="iniciarEncuesta()">Comenzar encuesta &rarr;</button>
+      <div id="resume-notice" class="hidden" style="background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;padding:12px;border-radius:10px;margin-bottom:18px;font-size:0.9rem;">
+        Tienes una encuesta en progreso guardada automáticamente.
+      </div>
+      <button class="btn-hero" id="btn-start-main" onclick="iniciarEncuesta()">Comenzar encuesta &rarr;</button>
+      <div id="btn-reset-wrap" class="hidden">
+        <button type="button" class="btn-secondary-hero" onclick="reiniciarEncuestaGuardada()">Empezar una nueva encuesta desde cero</button>
+      </div>
     </div>
   </div>
 
@@ -198,7 +217,10 @@
 
       <!-- SECCIÓN 1: CONSENTIMIENTO -->
       <div id="sec-1">
-        <span class="badge">Sección 1 de 5 · Consentimiento</span>
+        <div class="top-meta">
+          <span class="badge">Sección 1 de 5 · Consentimiento</span>
+          <span class="autosave-tag" id="save-ind-1">● Guardado automático activo</span>
+        </div>
         <h1>Consentimiento Informado</h1>
         <div class="consent-box">
           <strong>Estimado(a) participante:</strong><br>
@@ -209,8 +231,8 @@
         <div class="q-block">
           <span class="q-title">1. ¿Está usted de acuerdo en responder esta breve encuesta? <span class="req">*</span></span>
           <div class="radio-group">
-            <label class="radio-opt"><input type="radio" name="p1" value="Acepto"> Acepto participar voluntariamente en esta investigación y autorizo el uso de mis respuestas para fines estrictamente académicos</label>
-            <label class="radio-opt"><input type="radio" name="p1" value="No acepto"> No acepto participar</label>
+            <label class="radio-opt"><input type="radio" name="p1" value="Acepto" onchange="guardarBorradorLocal()"> Acepto participar voluntariamente en esta investigación y autorizo el uso de mis respuestas para fines estrictamente académicos</label>
+            <label class="radio-opt"><input type="radio" name="p1" value="No acepto" onchange="guardarBorradorLocal()"> No acepto participar</label>
           </div>
         </div>
         <div id="err-1" class="alert">Por favor seleccione una opción para continuar.</div>
@@ -222,14 +244,17 @@
 
       <!-- SECCIÓN 2: DATOS GENERALES (P2 - P7) -->
       <div id="sec-2" class="hidden">
-        <span class="badge">Sección 2 de 5 · Datos Generales</span>
+        <div class="top-meta">
+          <span class="badge">Sección 2 de 5 · Datos Generales</span>
+          <span class="autosave-tag">● Progreso guardado</span>
+        </div>
         <h2>Datos Generales</h2>
         <div id="err-2" class="alert">Por favor complete todas las preguntas obligatorias (*) antes de continuar.</div>
 
         <div class="grid-2">
           <div class="q-block">
             <label class="q-title" for="p2">2. Género <span class="req">*</span></label>
-            <select id="p2">
+            <select id="p2" onchange="guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Masculino">Masculino</option>
               <option value="Femenino">Femenino</option>
@@ -239,7 +264,7 @@
 
           <div class="q-block">
             <label class="q-title" for="p3">3. Edad <span class="req">*</span></label>
-            <select id="p3">
+            <select id="p3" onchange="guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Menos de 18">Menos de 18</option>
               <option value="18 - 24">18 - 24</option>
@@ -253,7 +278,7 @@
 
           <div class="q-block">
             <label class="q-title" for="p4">4. Ocupación <span class="req">*</span></label>
-            <select id="p4" onchange="toggleOtro('p4', 'p4-otro')">
+            <select id="p4" onchange="toggleOtro('p4', 'p4-otro'); guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Estudiante">Estudiante</option>
               <option value="Trabajador dependiente">Trabajador dependiente</option>
@@ -261,12 +286,12 @@
               <option value="Ama de casa">Ama de casa</option>
               <option value="Otro">Otro</option>
             </select>
-            <input type="text" id="p4-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique su ocupación">
+            <input type="text" id="p4-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique su ocupación" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p5">5. Rango de ingreso mensual</label>
-            <select id="p5">
+            <select id="p5" onchange="guardarBorradorLocal()">
               <option value="No especificado">Seleccione su respuesta (opcional)...</option>
               <option value="Hasta S/ 1130">Hasta S/ 1130</option>
               <option value="S/ 1131 - 2000">S/ 1131 - 2000</option>
@@ -278,7 +303,7 @@
 
           <div class="q-block">
             <label class="q-title" for="p6">6. Ruta del bus en la que se encuesta <span class="req">*</span></label>
-            <select id="p6" onchange="toggleOtro('p6', 'p6-otro')">
+            <select id="p6" onchange="toggleOtro('p6', 'p6-otro'); guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Bus Bolognesi">Bus Bolognesi</option>
               <option value="Bus Sican">Bus Sican</option>
@@ -290,12 +315,12 @@
               <option value="Bus Nueva Alternativa - Ruta 16">Bus Nueva Alternativa - Ruta 16</option>
               <option value="Otro">Otra ruta</option>
             </select>
-            <input type="text" id="p6-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique la ruta del bus">
+            <input type="text" id="p6-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique la ruta del bus" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p7">7. Franja horaria <span class="req">*</span></label>
-            <select id="p7">
+            <select id="p7" onchange="guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Pico manana (6 - 9)">Pico mañana (6 - 9)</option>
               <option value="Valle (9 - 17)">Valle (9 - 17)</option>
@@ -312,23 +337,33 @@
 
       <!-- SECCIÓN 3: CARACTERIZACIÓN DECLARATIVA CON RAMIFICACIÓN (P8 - P11) -->
       <div id="sec-3" class="hidden">
-        <span class="badge">Sección 3 de 5 · Caracterización declarativa</span>
+        <div class="top-meta">
+          <span class="badge">Sección 3 de 5 · Caracterización declarativa</span>
+          <span class="autosave-tag">● Progreso guardado</span>
+        </div>
         <h2>Caracterización declarativa</h2>
         <p class="desc">Estas preguntas son respecto a su viaje principal, el que realiza con más frecuencia.</p>
         <div id="err-3" class="alert">Por favor responda todas las preguntas visibles antes de continuar.</div>
 
         <div class="q-block">
-          <label class="q-title" for="p8">8. ¿Es usted un usuario frecuente de bus de transporte público? <span class="req">*</span></label>
-          <select id="p8">
+          <label class="q-title" for="p8">8. ¿Qué modo de transporte usa para sus viajes frecuentes? <span class="req">*</span></label>
+          <select id="p8" onchange="toggleOtro('p8', 'p8-otro'); guardarBorradorLocal()">
             <option value="">Seleccione su respuesta...</option>
-            <option value="Si">Sí</option>
-            <option value="No">No</option>
+            <option value="Bus">Bus</option>
+            <option value="Auto particular">Auto particular</option>
+            <option value="Moto lineal">Moto lineal</option>
+            <option value="Mototaxi">Mototaxi</option>
+            <option value="Taxi colectivo">Taxi colectivo</option>
+            <option value="Taxi">Taxi</option>
+            <option value="A pie / bicicleta">A pie / bicicleta</option>
+            <option value="Otro">Otro (especificar)</option>
           </select>
+          <input type="text" id="p8-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el modo de transporte" oninput="guardarBorradorLocal()">
         </div>
 
         <div class="q-block">
-          <label class="q-title" for="p9">9. ¿Qué modo de transporte usaba de manera frecuente antes de usar el bus para este viaje? <span class="req">*</span></label>
-          <select id="p9" onchange="manejarRamificacionP9()">
+          <label class="q-title" for="p9">9. ¿Usted usó algún otro modo de transporte de manera frecuente antes de usar bus? <span class="req">*</span></label>
+          <select id="p9" onchange="manejarRamificacionP9(); guardarBorradorLocal()">
             <option value="">Seleccione su respuesta...</option>
             <option value="Auto particular">Auto particular</option>
             <option value="Moto lineal">Moto lineal</option>
@@ -337,16 +372,16 @@
             <option value="Taxi">Taxi</option>
             <option value="A pie / bicicleta">A pie / bicicleta</option>
             <option value="Otro">Otro (especificar)</option>
-            <option value="Ninguno, siempre usé el bus para este viaje">Ninguno, siempre usé el bus para este viaje</option>
+            <option value="No, siempre usé el bus">No, siempre usé el bus</option>
           </select>
-          <input type="text" id="p9-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el modo de transporte anterior">
+          <input type="text" id="p9-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el modo de transporte anterior" oninput="guardarBorradorLocal()">
         </div>
 
-        <!-- BLOQUE RAMIFICADO: Se muestra si P9 != "" y P9 != "Ninguno, siempre usé el bus para este viaje" -->
+        <!-- BLOQUE RAMIFICADO: Se muestra si P9 != "" y P9 != "No, siempre usé el bus" -->
         <div id="bloque-cambio-medio" class="hidden">
           <div class="q-block">
             <label class="q-title" for="p10">10. ¿Por qué cambió de medio de transporte? <span class="req">*</span></label>
-            <select id="p10" onchange="toggleOtro('p10', 'p10-otro')">
+            <select id="p10" onchange="toggleOtro('p10', 'p10-otro'); guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Tiempo de Viaje">Tiempo de Viaje</option>
               <option value="Costo">Costo</option>
@@ -356,12 +391,12 @@
               <option value="Comodidad">Comodidad</option>
               <option value="Otro">Otro</option>
             </select>
-            <input type="text" id="p10-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo del cambio">
+            <input type="text" id="p10-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo del cambio" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p11">11. ¿En qué año empezó a usar el bus para este viaje? <span class="req">*</span></label>
-            <select id="p11">
+            <select id="p11" onchange="guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Antes del 2023">Antes del 2023</option>
               <option value="2023">2023</option>
@@ -381,7 +416,10 @@
 
       <!-- SECCIÓN 4: VIAJE ACTUAL EN BUS / PREFERENCIAS REVELADAS (P12 - P17) -->
       <div id="sec-4" class="hidden">
-        <span class="badge">Sección 4 de 5 · Viaje actual en bus</span>
+        <div class="top-meta">
+          <span class="badge">Sección 4 de 5 · Viaje actual en bus</span>
+          <span class="autosave-tag">● Progreso guardado</span>
+        </div>
         <h2>Viaje actual en bus</h2>
         <p class="desc">Estas preguntas son respecto a su viaje actual o que realizará en unos momentos.</p>
         <div id="err-4" class="alert">Por favor complete todos los tiempos (minutos &ge; 0), la tarifa (&gt; 0), motivo y frecuencia.</div>
@@ -389,27 +427,27 @@
         <div class="grid-2">
           <div class="q-block">
             <label class="q-title" for="p12">12. ¿Cuántos minutos demora en llegar al paradero (caminata)? <span class="req">*</span></label>
-            <input type="number" id="p12" min="0" max="120" step="1" placeholder="Ej. 5">
+            <input type="number" id="p12" min="0" max="120" step="1" placeholder="Ej. 5" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p13">13. ¿Cuántos minutos espera normalmente el bus? <span class="req">*</span></label>
-            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 8">
+            <input type="number" id="p13" min="0" max="120" step="1" placeholder="Ej. 8" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p14">14. ¿Cuántos minutos va a bordo del bus? <span class="req">*</span></label>
-            <input type="number" id="p14" min="1" max="240" step="1" placeholder="Ej. 25">
+            <input type="number" id="p14" min="1" max="240" step="1" placeholder="Ej. 25" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p15">15. ¿Cuánto paga por ese viaje? (tarifa total, en soles) <span class="req">*</span></label>
-            <input type="number" id="p15" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00">
+            <input type="number" id="p15" min="0.5" max="50" step="0.1" placeholder="Ej. 2.00" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p16">16. Motivo principal del viaje <span class="req">*</span></label>
-            <select id="p16" onchange="toggleOtro('p16', 'p16-otro')">
+            <select id="p16" onchange="toggleOtro('p16', 'p16-otro'); guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Estudios">Estudios</option>
               <option value="Trabajo">Trabajo</option>
@@ -418,12 +456,12 @@
               <option value="Paseo">Paseo</option>
               <option value="Otro">Otro</option>
             </select>
-            <input type="text" id="p16-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo">
+            <input type="text" id="p16-otro" class="hidden" style="margin-top:6px;" placeholder="Especifique el motivo" oninput="guardarBorradorLocal()">
           </div>
 
           <div class="q-block">
             <label class="q-title" for="p17">17. Frecuencia de uso del bus <span class="req">*</span></label>
-            <select id="p17">
+            <select id="p17" onchange="guardarBorradorLocal()">
               <option value="">Seleccione su respuesta...</option>
               <option value="Todos los dias">Todos los días</option>
               <option value="3 - 5 veces por semana">3 - 5 veces por semana</option>
@@ -441,7 +479,10 @@
       <!-- SECCIÓN 5: ENCUESTAS DECLARADAS PIVOTADAS (9 ESCENARIOS L27 + 1 CONTROL DE PLAUSIBILIDAD) -->
       <div id="sec-5" class="hidden">
         <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-        <span class="badge" id="card-counter">Situación 1 de 10</span>
+        <div class="top-meta">
+          <span class="badge" id="card-counter">Situación 1 de 10</span>
+          <span class="autosave-tag" id="sp-save-status">● Guardado automático</span>
+        </div>
         <h2>Encuestas declaradas: Planteo de situación</h2>
         <p class="desc">
           Imagine que debe hacer el <strong>MISMO viaje habitual</strong> que acaba de describir. Le presentaré 10 situaciones con tres opciones. En cada una, elija la que usaría. Todas las opciones llevan al mismo destino.<br>
@@ -488,6 +529,7 @@
 <script>
 // URL de tu Google Apps Script conectada
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8Mllf2YscC24EzqMaUa3jakvIhx-NrsNSMV7asumzb0sHY8YkMw9J65C3r13V0a_HYw/exec";
+const STORAGE_KEY = "encuesta_sit_piura_v3";
 
 // Diseño Ortogonal L27 exacto (Diseno_SP_L27_v2.xlsx - versión piloto 2)
 const DISENO_L27 = [
@@ -520,13 +562,26 @@ const DISENO_L27 = [
   {"bloque":3,"escenario":9,"bus":{"acceso":-0.2,"espera":-0.2,"abordo":-0.2,"tarifaDelta":-0.5},"sit":{"acceso":1.0,"espera":0.35,"abordo":0.5,"tarifa":0.5},"moto":{"acceso":-0.4,"espera":-0.15,"abordoNivel":2,"tarifaNivel":2}}
 ];
 
-// Escenario 10 – Control de plausibilidad (Bus = RP actual; SIT en nivel conservador [Nivel 3]; Mototaxi en nivel medio [Nivel 2])
+// Escenario 10 – Control de plausibilidad (Bus = RP actual; SIT en nivel conservador; Mototaxi en niveles medios: 2 min caminata / 2 min espera)
 const ESCENARIO_CONTROL = {
   escenario: 10,
   esControl: true,
   bus: { acceso: 0.0, espera: 0.0, abordo: 0.0, tarifaDelta: 0.0 },
   sit: { acceso: 1.0, espera: 0.35, abordo: 0.5, tarifa: 0.5 },
   moto: { acceso: -0.6, espera: -0.5, abordoNivel: 1, tarifaNivel: 1 }
+};
+
+// Niveles fijos realistas de Mototaxi en Piura para caminata y espera: 1, 2 o 5 minutos
+const MOTO_ACCESO_MINUTOS = {
+  "-0.8": 1,
+  "-0.6": 2,
+  "-0.4": 5
+};
+
+const MOTO_ESPERA_MINUTOS = {
+  "-0.8": 1,
+  "-0.5": 2,
+  "-0.15": 5
 };
 
 // Tablas de Mototaxi según tramo (hoja Niveles v2: nivel 0 = bajo, 1 = medio, 2 = alto)
@@ -542,19 +597,27 @@ const TIEMPO_ABORDO_MOTO_TRAMO = {
   "Largo": [20, 25, 30]
 };
 
-const OPCION_NINGUNO_P9 = "Ninguno, siempre usé el bus para este viaje";
+const OPCION_NINGUNO_P9 = "No, siempre usé el bus";
 
-let estado = {
-  respondentId: 'RESP_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
-  timestamp: new Date().toISOString(),
-  datos: {},
-  rp: {},
-  tramo: "Medio",
-  bloque: 1,
-  tarjetas: [],
-  indiceActual: 0,
-  resultados: []
-};
+function crearEstadoInicial() {
+  return {
+    respondentId: 'RESP_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+    timestamp: new Date().toISOString(),
+    seccionActual: 'sec-1',
+    enPortada: true,
+    completada: false,
+    formInputs: {},
+    datos: {},
+    rp: {},
+    tramo: "Medio",
+    bloque: 1,
+    tarjetas: [],
+    indiceActual: 0,
+    resultados: []
+  };
+}
+
+let estado = crearEstadoInicial();
 
 function barajarFisherYates(array) {
   const copia = [...array];
@@ -565,13 +628,111 @@ function barajarFisherYates(array) {
   return copia;
 }
 
+// ============================================================
+// PERSISTENCIA AUTOMÁTICA POR PREGUNTA / SECCIÓN (localStorage)
+// ============================================================
+function capturarInputsFormulario() {
+  const p1Sel = document.querySelector('input[name="p1"]:checked');
+  const ids = [
+    'p2', 'p3', 'p4', 'p4-otro', 'p5', 'p6', 'p6-otro', 'p7',
+    'p8', 'p8-otro', 'p9', 'p9-otro', 'p10', 'p10-otro', 'p11',
+    'p12', 'p13', 'p14', 'p15', 'p16', 'p16-otro', 'p17'
+  ];
+  const snap = { p1: p1Sel ? p1Sel.value : "" };
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) snap[id] = el.value;
+  });
+  return snap;
+}
+
+function guardarBorradorLocal() {
+  if (estado.completada) return;
+  estado.formInputs = capturarInputsFormulario();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+  } catch (e) {
+    // Ignorar si el navegador bloquea storage en modo incógnito estricto
+  }
+}
+
+function restaurarInputsFormulario(snap) {
+  if (!snap) return;
+  if (snap.p1) {
+    const radio = document.querySelector(`input[name="p1"][value="${snap.p1}"]`);
+    if (radio) radio.checked = true;
+  }
+  Object.keys(snap).forEach(id => {
+    if (id === 'p1') return;
+    const el = document.getElementById(id);
+    if (el && snap[id] !== undefined) el.value = snap[id];
+  });
+  toggleOtro('p4', 'p4-otro');
+  toggleOtro('p6', 'p6-otro');
+  toggleOtro('p8', 'p8-otro');
+  manejarRamificacionP9();
+  toggleOtro('p10', 'p10-otro');
+  toggleOtro('p16', 'p16-otro');
+  // Restaurar textos "Otro" después de mostrar los inputs
+  ['p4-otro', 'p6-otro', 'p8-otro', 'p9-otro', 'p10-otro', 'p16-otro'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && snap[id]) el.value = snap[id];
+  });
+}
+
+function cargarBorradorAlInicio() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const guardado = JSON.parse(raw);
+    if (!guardado || guardado.completada) return;
+
+    estado = guardado;
+    restaurarInputsFormulario(estado.formInputs);
+
+    if (!estado.enPortada) {
+      document.getElementById('sec-welcome').classList.add('hidden');
+      document.getElementById('survey-main').classList.remove('hidden');
+      mostrarSeccion(estado.seccionActual || 'sec-1', false);
+      if (estado.seccionActual === 'sec-5' && estado.tarjetas.length > 0) {
+        renderizarTarjeta();
+      }
+    } else {
+      document.getElementById('resume-notice').classList.remove('hidden');
+      document.getElementById('btn-start-main').innerHTML = "Continuar encuesta guardada &rarr;";
+      document.getElementById('btn-reset-wrap').classList.remove('hidden');
+    }
+  } catch (e) {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+function reiniciarEncuestaGuardada() {
+  localStorage.removeItem(STORAGE_KEY);
+  estado = crearEstadoInicial();
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  document.querySelectorAll('input[type="text"], input[type="number"]').forEach(i => i.value = "");
+  manejarRamificacionP9();
+  document.getElementById('resume-notice').classList.add('hidden');
+  document.getElementById('btn-start-main').innerHTML = "Comenzar encuesta &rarr;";
+  document.getElementById('btn-reset-wrap').classList.add('hidden');
+}
+
 function iniciarEncuesta() {
+  estado.enPortada = false;
   document.getElementById('sec-welcome').classList.add('hidden');
   document.getElementById('survey-main').classList.remove('hidden');
+  mostrarSeccion(estado.seccionActual || 'sec-1');
+  if (estado.seccionActual === 'sec-5' && estado.tarjetas.length > 0) {
+    renderizarTarjeta();
+  }
   window.scrollTo(0, 0);
 }
 
 function volverPortada() {
+  estado.enPortada = true;
+  guardarBorradorLocal();
   document.getElementById('survey-main').classList.add('hidden');
   document.getElementById('sec-welcome').classList.remove('hidden');
   window.scrollTo(0, 0);
@@ -604,11 +765,13 @@ function manejarRamificacionP9() {
   }
 }
 
-function mostrarSeccion(id) {
+function mostrarSeccion(id, persistir = true) {
   ['sec-1', 'sec-2', 'sec-3', 'sec-4', 'sec-5', 'sec-done'].forEach(s => {
     document.getElementById(s).classList.add('hidden');
   });
   document.getElementById(id).classList.remove('hidden');
+  estado.seccionActual = id;
+  if (persistir) guardarBorradorLocal();
   window.scrollTo(0, 0);
 }
 
@@ -620,11 +783,13 @@ function validarSec1() {
   }
   document.getElementById('err-1').style.display = 'none';
   if (sel.value === "No acepto") {
+    estado.completada = true;
+    localStorage.removeItem(STORAGE_KEY);
     document.getElementById('done-icon').classList.add('hidden');
     document.getElementById('done-title').textContent = "Encuesta finalizada";
     document.getElementById('done-desc').textContent = "Agradecemos su tiempo. No se ha registrado ningún dato.";
     document.getElementById('sync-status').classList.add('hidden');
-    mostrarSeccion('sec-done');
+    mostrarSeccion('sec-done', false);
     return;
   }
   mostrarSeccion('sec-2');
@@ -648,7 +813,7 @@ function validarSec2() {
 }
 
 function validarSec3() {
-  const p8 = document.getElementById('p8').value;
+  const p8 = obtenerValorConOtro('p8', 'p8-otro');
   const p9Raw = document.getElementById('p9').value;
   const p9 = obtenerValorConOtro('p9', 'p9-otro');
   const huboCambio = p9Raw !== "" && p9Raw !== OPCION_NINGUNO_P9;
@@ -661,7 +826,7 @@ function validarSec3() {
   }
   document.getElementById('err-3').style.display = 'none';
   Object.assign(estado.datos, {
-    P8_Usuario_Frecuente_Bus: p8,
+    P8_Modo_Frecuente: p8,
     P9_Modo_Previo: p9,
     P10_Motivo_Cambio: p10,
     P11_Anio_Inicio_Bus: p11
@@ -708,20 +873,29 @@ function iniciarSP() {
   }
   document.getElementById('err-4').style.display = 'none';
 
+  const rpCambio = (
+    estado.rp.acceso !== p12 ||
+    estado.rp.espera !== p13 ||
+    estado.rp.abordo !== p14 ||
+    estado.rp.tarifa !== p15
+  );
+
   estado.rp = { acceso: p12, espera: p13, abordo: p14, tarifa: p15 };
   estado.tramo = obtenerTramo(p14);
   Object.assign(estado.datos, { P16_Motivo_Viaje: p16, P17_Frecuencia_Bus: p17 });
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const paramBloque = parseInt(urlParams.get('bloque'));
-  estado.bloque = [1, 2, 3].includes(paramBloque) ? paramBloque : (Math.floor(Math.random() * 3) + 1);
+  // Si aún no se generaron tarjetas o si el usuario retrocedió y cambió sus tiempos/tarifa RP, generar/recalcular
+  if (estado.tarjetas.length === 0 || rpCambio) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramBloque = parseInt(urlParams.get('bloque'));
+    estado.bloque = [1, 2, 3].includes(paramBloque) ? paramBloque : (Math.floor(Math.random() * 3) + 1);
 
-  // Barajar los 9 escenarios del bloque con Fisher-Yates + añadir al final el Escenario 10 de Control de Plausibilidad
-  const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque).map(d => ({ ...d, esControl: false }));
-  const aleatorios = barajarFisherYates(delBloque);
-  estado.tarjetas = [...aleatorios, { ...ESCENARIO_CONTROL, bloque: estado.bloque }];
-  estado.indiceActual = 0;
-  estado.resultados = new Array(estado.tarjetas.length).fill(null);
+    const delBloque = DISENO_L27.filter(d => d.bloque === estado.bloque).map(d => ({ ...d, esControl: false }));
+    const aleatorios = barajarFisherYates(delBloque);
+    estado.tarjetas = [...aleatorios, { ...ESCENARIO_CONTROL, bloque: estado.bloque }];
+    estado.indiceActual = 0;
+    estado.resultados = new Array(estado.tarjetas.length).fill(null);
+  }
 
   mostrarSeccion('sec-5');
   renderizarTarjeta();
@@ -750,9 +924,9 @@ function renderizarTarjeta() {
   const sitAbo = pivotarTiempoCalc(estado.rp.abordo, card.sit.abordo);
   const sitTar = pivotarTarifaSIT(estado.rp.tarifa, card.sit.tarifa);
 
-  // Mototaxi: acceso/espera pivotados %, tiempo a bordo y tarifa por tramo
-  const motoAcc = pivotarTiempoCalc(estado.rp.acceso, card.moto.acceso);
-  const motoEsp = pivotarTiempoCalc(estado.rp.espera, card.moto.espera);
+  // Mototaxi: caminata y espera realistas en Piura (1, 2 o 5 min según nivel L27), tiempo a bordo y tarifa por tramo
+  const motoAcc = MOTO_ACCESO_MINUTOS[String(card.moto.acceso)] ?? 2;
+  const motoEsp = MOTO_ESPERA_MINUTOS[String(card.moto.espera)] ?? 2;
   const motoAbo = TIEMPO_ABORDO_MOTO_TRAMO[estado.tramo][card.moto.abordoNivel];
   const motoTar = TARIFAS_MOTO_TRAMO[estado.tramo][card.moto.tarifaNivel];
 
@@ -762,7 +936,7 @@ function renderizarTarjeta() {
     motoAcc, motoEsp, motoAbo, motoTar
   };
 
-  // Orden visual de columnas: Bus (1), SIT (3), Mototaxi (2) — solo valores puros de tiempo y tarifa
+  // Orden visual de columnas: Bus (1), SIT (3), Mototaxi (2)
   document.getElementById('sp-tbody').innerHTML = `
     <tr>
       <td>Caminata hasta paradero</td>
@@ -790,41 +964,23 @@ function renderizarTarjeta() {
     </tr>
     <tr class="choice-row">
       <td>¿Cuál elegiría?</td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="1" ${previa === 1 ? 'checked' : ''}>Bus</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="3" ${previa === 3 ? 'checked' : ''}>SIT</label></td>
-      <td><label class="choice-label"><input type="radio" name="choice" value="2" ${previa === 2 ? 'checked' : ''}>Mototaxi</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="1" ${previa === 1 ? 'checked' : ''} onchange="guardarSeleccionParcial(1)">Bus</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="3" ${previa === 3 ? 'checked' : ''} onchange="guardarSeleccionParcial(3)">SIT</label></td>
+      <td><label class="choice-label"><input type="radio" name="choice" value="2" ${previa === 2 ? 'checked' : ''} onchange="guardarSeleccionParcial(2)">Mototaxi</label></td>
     </tr>
   `;
 }
 
-function anteriorEscenario() {
-  document.getElementById('err-5').style.display = 'none';
-  if (estado.indiceActual > 0) {
-    estado.indiceActual--;
-    renderizarTarjeta();
-  } else {
-    mostrarSeccion('sec-4');
-  }
-}
-
-function siguienteEscenario() {
-  const seleccionado = document.querySelector('input[name="choice"]:checked');
-  if (!seleccionado) {
-    document.getElementById('err-5').style.display = 'block';
-    return;
-  }
-  document.getElementById('err-5').style.display = 'none';
-
-  const card = estado.tarjetas[estado.indiceActual];
+function construirFilaResultado(idx, choiceVal) {
+  const card = estado.tarjetas[idx];
   const c = card.calculado;
-
-  estado.resultados[estado.indiceActual] = {
+  return {
     ID_Encuestado: estado.respondentId,
     Fecha_Hora: estado.timestamp,
     ...estado.datos,
     Tramo_Viaje: estado.tramo,
     P18_Bloque: estado.bloque,
-    Orden_Presentacion: estado.indiceActual + 1,
+    Orden_Presentacion: idx + 1,
     Escenario_L27: card.escenario,
     Es_Control_Plausibilidad: card.esControl ? "Si" : "No",
     P12_RP_BUS_TTC: estado.rp.acceso,
@@ -846,35 +1002,85 @@ function siguienteEscenario() {
     SIT_TTE: c.sitEsp,
     SIT_TTAB: c.sitAbo,
     SIT_CO: c.sitTar,
-    CHOICE: parseInt(seleccionado.value)
+    CHOICE: parseInt(choiceVal)
   };
+}
 
-  estado.indiceActual++;
-  if (estado.indiceActual < estado.tarjetas.length) {
+function guardarSeleccionParcial(choiceVal) {
+  const fila = construirFilaResultado(estado.indiceActual, choiceVal);
+  estado.resultados[estado.indiceActual] = fila;
+  guardarBorradorLocal();
+
+  const statusTag = document.getElementById('sp-save-status');
+  if (statusTag) statusTag.textContent = "● Respuesta respaldada";
+}
+
+function anteriorEscenario() {
+  document.getElementById('err-5').style.display = 'none';
+  if (estado.indiceActual > 0) {
+    estado.indiceActual--;
+    guardarBorradorLocal();
     renderizarTarjeta();
   } else {
-    mostrarSeccion('sec-done');
-    enviarAGoogleSheets();
+    mostrarSeccion('sec-4');
   }
 }
 
-function enviarAGoogleSheets() {
+function siguienteEscenario() {
+  const seleccionado = document.querySelector('input[name="choice"]:checked');
+  if (!seleccionado) {
+    document.getElementById('err-5').style.display = 'block';
+    return;
+  }
+  document.getElementById('err-5').style.display = 'none';
+
+  const filaActual = construirFilaResultado(estado.indiceActual, seleccionado.value);
+  estado.resultados[estado.indiceActual] = filaActual;
+
+  // Envío incremental de la fila recién respondida como respaldo ante cortes
+  enviarFilasAGoogleSheets([filaActual], false);
+
+  estado.indiceActual++;
+  guardarBorradorLocal();
+
+  if (estado.indiceActual < estado.tarjetas.length) {
+    renderizarTarjeta();
+  } else {
+    estado.completada = true;
+    localStorage.removeItem(STORAGE_KEY);
+    mostrarSeccion('sec-done', false);
+    enviarFilasAGoogleSheets(estado.resultados, true);
+  }
+}
+
+function enviarFilasAGoogleSheets(filas, esEnvioFinal) {
   const box = document.getElementById('sync-status');
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ filas: estado.resultados })
+    body: JSON.stringify({
+      tipo_envio: esEnvioFinal ? "completo" : "parcial",
+      filas: filas
+    })
   })
   .then(() => {
-    box.className = "status-box status-ok";
-    box.textContent = "✓ Respuestas enviadas correctamente. Ya puedes cerrar esta ventana.";
+    if (esEnvioFinal && box) {
+      box.className = "status-box status-ok";
+      box.textContent = "✓ Respuestas enviadas correctamente. Ya puedes cerrar esta ventana.";
+    }
   })
   .catch(() => {
-    box.className = "status-box status-err";
-    box.textContent = "Hubo un problema de conexión al enviar. Por favor verifica tu internet e inténtalo nuevamente.";
+    if (esEnvioFinal && box) {
+      box.className = "status-box status-err";
+      box.textContent = "Hubo un problema de conexión al enviar. Por favor verifica tu internet e inténtalo nuevamente.";
+    }
   });
 }
+
+// Restaurar sesión automáticamente si hubo cierre o recarga accidental
+window.addEventListener('DOMContentLoaded', cargarBorradorAlInicio);
 </script>
 </body>
 </html>
+
