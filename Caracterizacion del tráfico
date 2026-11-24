@@ -217,8 +217,8 @@
 <script>
 /* ===================== CONFIGURACIÓN (edita aquí) ===================== */
 const CFG = {
-  URL:   "PEGAR_AQUI_LA_URL_DEL_SCRIPT",   // URL de la aplicación web de Apps Script (termina en /exec)
-  CLAVE: "CAMBIAR_ESTA_CLAVE"              // debe ser igual a la CLAVE del script
+  URL:   "https://script.google.com/macros/s/AKfycbx4VKviT-WbnQGaX6oIW5fJsflwDA1slqwWsdrh30YCBcqfTf1NabRgbCuQn_HMj0Et/exec",   // URL de la aplicación web de Apps Script (termina en /exec)
+  CLAVE: "PIURA_SIT_2026"              // debe ser igual a la CLAVE del script
 };
 const RUTAS = [
   "Bolognesi","Sican","Nueva Alternativa – Ruta 14","Olas del Pacífico",
