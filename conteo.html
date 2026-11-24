@@ -224,17 +224,24 @@ const RUTAS = [
   "Bolognesi","Sican","Nueva Alternativa – Ruta 14","Olas del Pacífico",
   "Cruzero","Morado","Piuranito","Nueva Alternativa – Ruta 16","Otra / no identificada"
 ];
-// Puntos candidatos (estaciones de estudios previos). Reemplázalos por los que salgan del sorteo.
+// Puntos sorteados (1 de estrato A y 1 de estrato M por ruta, a partir de las encuestas a bordo de enero 2026).
 const PUNTOS = [
-  {c:"EC02", n:"Av. Sánchez Cerro con Jr. Loreto"},
-  {c:"EC15", n:"Av. Don Bosco con Av. Loreto"},
-  {c:"EC20", n:"Av. Grau con Av. Guillermo Gulman"},
-  {c:"EC06", n:"Av. Sullana con Calle Country"},
-  {c:"EC17", n:"Puente Bolognesi con Jr. Tacna"},
-  {c:"EC01", n:"Av. Guardia Civil con Av. Mariscal Tito"},
-  {c:"UNI-P2", n:"Puente Sánchez Cerro"},
-  {c:"UNI-P5", n:"Av. Gulman"},
-  {c:"UNI-P10", n:"Av. Don Bosco"}
+  {c:"BOL-A", n:"Av. Gulman (ruta Bolognesi, estrato A)"},
+  {c:"BOL-M", n:"Av. Cáceres (ruta Bolognesi, estrato M)"},
+  {c:"SIC-A", n:"Monte Castillo (ruta Sicán, estrato A)"},
+  {c:"SIC-M", n:"Paradero Veranda (ruta Sicán, estrato M)"},
+  {c:"NA16-A", n:"Tacalá (ruta Nueva Alternativa 16, estrato A)"},
+  {c:"NA16-M", n:"Sunarp (ruta Nueva Alternativa 16, estrato M)"},
+  {c:"OLA-A", n:"Av. Guardia Civil – Tacalá (ruta Olas del Pacífico, estrato A)"},
+  {c:"OLA-M", n:"Idepunp (ruta Olas del Pacífico, estrato M)"},
+  {c:"CRU-A", n:"Real Plaza (ruta Cruzero, estrato A)"},
+  {c:"CRU-M", n:"Óvalo Cáceres (ruta Cruzero, estrato M)"},
+  {c:"PIU-A", n:"Av. Cusco (ruta Piuranito, estrato A)"},
+  {c:"PIU-M", n:"Colegio Pedro Ruiz Gallo (ruta Piuranito, estrato M)"},
+  {c:"MOR-A", n:"Hospital Universitario (ruta Morado, estrato A)"},
+  {c:"MOR-M", n:"Av. Country (ruta Morado, estrato M)"},
+  {c:"NA14-A", n:"Paradero Indio (ruta Nueva Alternativa 14, estrato A)"},
+  {c:"NA14-M", n:"Calle Manzanos (ruta Nueva Alternativa 14, estrato M)"}
 ];
 const OCUP = [[0,"0 % vacío"],[25,"25 %"],[50,"50 %"],[75,"75 %"],[100,"100 % lleno"],[125,"Sobrecupo"]];
 const INC = ["Lluvia","Tráfico / congestión","Bus fuera de ruta","Vía bloqueada","Bus no se detuvo","Otra"];
