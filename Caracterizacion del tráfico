@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Conteo de punto fijo · Piura</title>
+<style>
+  :root{
+    --bg:#f3f5f8; --card:#fff; --text:#1c2430; --muted:#667085; --line:#d5dbe3;
+    --pri:#0f4c81; --pri-d:#093154; --pri-l:#e6f0f8; --ok:#1b8a5a; --warn:#b45309; --err:#b42318;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#10161d; --card:#18212b; --text:#e8edf3; --muted:#9aa7b6; --line:#2c3947; --pri:#5aa5e0; --pri-d:#cfe6f8; --pri-l:#1d3144; --ok:#3ecf8e; --warn:#f0a044; --err:#f97066; }
+  }
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+  body{margin:0;background:var(--bg);color:var(--text);padding-bottom:84px}
+  header.top{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .grow{flex:1}
+  h1{font-size:1.05rem;margin:0}
+  .sub{font-size:.8rem;color:var(--muted)}
+  .clock{font-variant-numeric:tabular-nums;font-weight:700;font-size:1.15rem}
+  .pill{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--pri-l);color:var(--pri)}
+  main{padding:14px 16px;max-width:720px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+  label.f{display:block;font-size:.84rem;font-weight:600;margin:10px 0 4px}
+  input,select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:1rem;background:var(--card);color:var(--text)}
+  button{font-size:1rem;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:12px 14px;cursor:pointer;min-height:48px}
+  button.pri{background:var(--pri);border-color:var(--pri);color:#fff;font-weight:700}
+  button.ghost{background:transparent}
+  button.danger{color:var(--err);border-color:var(--err)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .route{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;min-height:72px;border-width:2px}
+  .route b{font-size:.95rem;line-height:1.15}
+  .route .n{font-size:.78rem;color:var(--muted)}
+  .route:active{background:var(--pri-l)}
+  nav.tabs{position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:6}
+  nav.tabs button{border:none;border-radius:0;background:transparent;font-size:.8rem;min-height:62px;color:var(--muted)}
+  nav.tabs button.on{color:var(--pri);font-weight:800;box-shadow:inset 0 3px 0 var(--pri)}
+  .hidden{display:none!important}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{padding:10px 14px;border-radius:99px;border:2px solid var(--line);min-height:44px;font-weight:600}
+  .chip.on{border-color:var(--pri);background:var(--pri-l);color:var(--pri)}
+  .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+  .sheet{background:var(--card);width:100%;max-width:720px;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+  .step{display:flex;align-items:center;gap:8px}
+  .step button{width:48px;padding:0;font-size:1.3rem}
+  .step input{text-align:center;font-size:1.2rem}
+  .wait{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .wait .t{font-variant-numeric:tabular-nums;font-weight:800;font-size:1.2rem;min-width:64px}
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  td,th{padding:6px 4px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  .toast{position:fixed;left:16px;right:16px;bottom:80px;z-index:30;background:var(--pri-d);color:var(--bg);padding:12px 14px;border-radius:10px;font-size:.9rem;display:none}
+  .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+  .kpi div{background:var(--pri-l);border-radius:10px;padding:10px;text-align:center}
+  .kpi b{display:block;font-size:1.3rem;color:var(--pri)}
+  .kpi span{font-size:.72rem;color:var(--muted)}
+  .st-ok{color:var(--ok);font-weight:700}.st-no{color:var(--warn);font-weight:700}.st-sc{color:var(--muted);font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="row">
+    <div class="grow">
+      <h1>Conteo de punto fijo</h1>
+      <div class="sub" id="hdr-sub">Sin sesión activa</div>
+    </div>
+    <div style="text-align:right">
+      <div class="clock" id="clock">--:--:--</div>
+      <span class="pill" id="franja">—</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- CONFIGURACIÓN DE SESIÓN -->
+  <section id="v-setup">
+    <div class="card">
+      <b>Nueva sesión de conteo</b>
+      <p class="sub" style="margin:4px 0 0">Una sesión = un punto, un observador y una franja continua. Los datos se guardan en el teléfono y se envían al Excel cuando haya internet.</p>
+
+      <label class="f" for="s-obs">Observador</label>
+      <input id="s-obs" type="text" placeholder="Tu nombre" autocomplete="name">
+
+      <label class="f" for="s-punto">Punto de observación</label>
+      <select id="s-punto"></select>
+      <input id="s-punto-otro" class="hidden" type="text" style="margin-top:6px" placeholder="Escribe la intersección o el paradero">
+
+      <label class="f" for="s-clima">Clima</label>
+      <select id="s-clima">
+        <option>Despejado</option><option>Nublado</option><option>Llovizna / lluvia</option><option>Calor intenso</option>
+      </select>
+
+      <label class="f" for="s-notas">Notas (opcional)</label>
+      <input id="s-notas" type="text" placeholder="Ej. obras en la vía, desvío de tránsito">
+
+      <button class="pri" style="width:100%;margin-top:14px" onclick="iniciarSesion()">Iniciar conteo</button>
+    </div>
+    <div class="card">
+      <b>Envío al Excel</b>
+      <div class="kpi" style="margin-top:10px">
+        <div><b id="k0-pend">0</b><span>pendientes</span></div>
+        <div><b id="k0-ok">0</b><span>confirmados</span></div>
+        <div><b id="k0-tot">0</b><span>registros</span></div>
+      </div>
+      <button style="width:100%" onclick="enviar(true)">Enviar pendientes ahora</button>
+    </div>
+  </section>
+
+  <!-- BUSES -->
+  <section id="v-buses" class="hidden">
+    <div class="card">
+      <b>Toca la ruta cuando el bus llega al punto</b>
+      <p class="sub" style="margin:4px 0 10px">La hora queda registrada en el momento del toque. Luego marcas la ocupación.</p>
+      <div class="grid" id="route-grid"></div>
+    </div>
+    <div class="row"><button class="ghost grow" onclick="deshacerUltimo()">↩ Deshacer último registro</button></div>
+  </section>
+
+  <!-- ESPERA -->
+  <section id="v-espera" class="hidden">
+    <div class="card">
+      <b>Tiempo de espera de pasajeros</b>
+      <p class="sub" style="margin:4px 0 10px">Toca «Llega pasajero» cuando alguien llega al paradero y «Abordó» cuando sube. Observa a varios, uno por vez, al azar.</p>
+      <button class="pri" style="width:100%" onclick="llegaPasajero()">＋ Llega pasajero</button>
+      <div id="wait-list" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- INCIDENCIAS -->
+  <section id="v-incid" class="hidden">
+    <div class="card">
+      <b>Incidencias</b>
+      <div class="chips" style="margin:10px 0" id="inc-chips"></div>
+      <input id="inc-txt" type="text" placeholder="Describe (opcional si elegiste una)">
+      <button class="pri" style="width:100%;margin-top:10px" onclick="guardarIncidencia()">Guardar incidencia</button>
+    </div>
+  </section>
+
+  <!-- REGISTRO / ENVÍO -->
+  <section id="v-reg" class="hidden">
+    <div class="card">
+      <div class="kpi">
+        <div><b id="k-buses">0</b><span>buses</span></div>
+        <div><b id="k-esp">0</b><span>esperas</span></div>
+        <div><b id="k-inc">0</b><span>incidencias</span></div>
+      </div>
+      <div class="kpi">
+        <div><b id="k-pend">0</b><span>pendientes</span></div>
+        <div><b id="k-ok">0</b><span>confirmados</span></div>
+        <div><b id="k-sc">0</b><span>sin confirmar</span></div>
+      </div>
+      <div class="row">
+        <button class="pri grow" onclick="enviar(true)">Enviar ahora</button>
+        <button class="danger" onclick="finalizarSesion()">Finalizar sesión</button>
+      </div>
+    </div>
+    <div class="card">
+      <b>Últimos registros</b>
+      <div style="overflow:auto;margin-top:8px"><table id="tbl-ult"></table></div>
+    </div>
+    <div class="card">
+      <b>Copia de seguridad (CSV)</b>
+      <p class="sub" style="margin:4px 0 10px">Descarga estos archivos al terminar el día, por si algo falla con el envío.</p>
+      <div class="grid">
+        <button onclick="descargar('buses')">Buses</button>
+        <button onclick="descargar('espera')">Esperas</button>
+        <button onclick="descargar('incid')">Incidencias</button>
+        <button onclick="descargar('sesiones')">Sesiones</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs hidden" id="tabs">
+  <button data-v="buses" class="on" onclick="ir('buses')">🚌<br>Buses</button>
+  <button data-v="espera" onclick="ir('espera')">⏱<br>Espera</button>
+  <button data-v="incid" onclick="ir('incid')">⚠<br>Incidencias</button>
+  <button data-v="reg" onclick="ir('reg')">☰<br>Registro</button>
+</nav>
+
+<!-- HOJA: OCUPACIÓN DEL BUS -->
+<div class="sheet-bg hidden" id="sheet-bus">
+  <div class="sheet">
+    <div class="row"><b class="grow" id="sb-title">Bus</b><span class="sub" id="sb-time"></span></div>
+    <label class="f">Ocupación al llegar <span style="color:var(--err)">*</span></label>
+    <div class="chips" id="occ-chips"></div>
+    <div class="grid" style="margin-top:6px">
+      <div><label class="f">Suben (opcional)</label>
+        <div class="step"><button onclick="paso('sb-sube',-1)">−</button><input id="sb-sube" type="number" inputmode="numeric" min="0" placeholder="–"><button onclick="paso('sb-sube',1)">＋</button></div></div>
+      <div><label class="f">Bajan (opcional)</label>
+        <div class="step"><button onclick="paso('sb-baja',-1)">−</button><input id="sb-baja" type="number" inputmode="numeric" min="0" placeholder="–"><button onclick="paso('sb-baja',1)">＋</button></div></div>
+    </div>
+    <label class="f" for="sb-placa">Placa o N.° de unidad (opcional)</label>
+    <input id="sb-placa" type="text" autocapitalize="characters" placeholder="Ej. ABC-123">
+    <div class="row" style="margin-top:14px">
+      <button class="grow" onclick="cerrarSheet('sheet-bus')">Cancelar</button>
+      <button class="pri grow" id="sb-save" onclick="guardarBus()" disabled>Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOJA: RUTA DEL PASAJERO QUE ABORDÓ -->
+<div class="sheet-bg hidden" id="sheet-ab">
+  <div class="sheet">
+    <b>¿En qué ruta abordó?</b>
+    <div class="grid" id="ab-grid" style="margin-top:12px"></div>
+    <div class="row" style="margin-top:12px"><button class="grow" onclick="cerrarSheet('sheet-ab')">Cancelar</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== CONFIGURACIÓN (edita aquí) ===================== */
+const CFG = {
+  URL:   "PEGAR_AQUI_LA_URL_DEL_SCRIPT",   // URL de la aplicación web de Apps Script (termina en /exec)
+  CLAVE: "CAMBIAR_ESTA_CLAVE"              // debe ser igual a la CLAVE del script
+};
+const RUTAS = [
+  "Bolognesi","Sican","Nueva Alternativa – Ruta 14","Olas del Pacífico",
+  "Cruzero","Morado","Piuranito","Nueva Alternativa – Ruta 16","Otra / no identificada"
+];
+// Puntos candidatos (estaciones de estudios previos). Reemplázalos por los que salgan del sorteo.
+const PUNTOS = [
+  {c:"EC02", n:"Av. Sánchez Cerro con Jr. Loreto"},
+  {c:"EC15", n:"Av. Don Bosco con Av. Loreto"},
+  {c:"EC20", n:"Av. Grau con Av. Guillermo Gulman"},
+  {c:"EC06", n:"Av. Sullana con Calle Country"},
+  {c:"EC17", n:"Puente Bolognesi con Jr. Tacna"},
+  {c:"EC01", n:"Av. Guardia Civil con Av. Mariscal Tito"},
+  {c:"UNI-P2", n:"Puente Sánchez Cerro"},
+  {c:"UNI-P5", n:"Av. Gulman"},
+  {c:"UNI-P10", n:"Av. Don Bosco"}
+];
+const OCUP = [[0,"0 % vacío"],[25,"25 %"],[50,"50 %"],[75,"75 %"],[100,"100 % lleno"],[125,"Sobrecupo"]];
+const INC = ["Lluvia","Tráfico / congestión","Bus fuera de ruta","Vía bloqueada","Bus no se detuvo","Otra"];
+/* ====================================================================== */
+
+const KEY = "conteo_punto_fijo_v1";
+let S = cargar();
+let mem = null; // respaldo si localStorage falla
+let pendBus = null, pendAb = null, incSel = null, enviando = false;
+
+function cargar(){
+  try{ const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){}
+  return {sesion:null, buses:[], espera:[], incid:[], sesiones:[], esperaActiva:[]};
+}
+function guardar(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ mem = S; }
+}
+const pad = n => String(n).padStart(2,"0");
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2,10));
+function fechaStr(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function horaStr(d){ return pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds()); }
+function isoLocal(d){
+  const off = -d.getTimezoneOffset(), sg = off>=0?"+":"-", a = Math.abs(off);
+  return fechaStr(d)+"T"+horaStr(d)+sg+pad(Math.floor(a/60))+":"+pad(a%60);
+}
+function franjaDe(d){
+  const h = d.getHours();
+  if(h>=6 && h<9) return "Pico mañana (6-9)";
+  if(h>=9 && h<17) return "Valle (9-17)";
+  if(h>=17 && h<20) return "Pico tarde (17-20)";
+  return "Fuera de franja";
+}
+function toast(msg, ms=3200){
+  const t = document.getElementById("toast"); t.textContent = msg; t.style.display = "block";
+  clearTimeout(toast._t); toast._t = setTimeout(()=>t.style.display="none", ms);
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- Inicio ---------- */
+function init(){
+  const sel = document.getElementById("s-punto");
+  sel.innerHTML = '<option value="">Selecciona…</option>' +
+    PUNTOS.map(p=>`<option value="${esc(p.c)}">${esc(p.c)} · ${esc(p.n)}</option>`).join("") +
+    '<option value="__otro">Otro (escribir)</option>';
+  sel.onchange = () => document.getElementById("s-punto-otro").classList.toggle("hidden", sel.value!=="__otro");
+  document.getElementById("occ-chips").innerHTML = OCUP.map(([v,l])=>`<button class="chip" data-v="${v}" onclick="elegirOcc(${v})">${l}</button>`).join("");
+  document.getElementById("inc-chips").innerHTML = INC.map(t=>`<button class="chip" onclick="elegirInc(this)">${t}</button>`).join("");
+  try{ const u = localStorage.getItem(KEY+"_obs"); if(u) document.getElementById("s-obs").value = u; }catch(e){}
+  vista();
+  tick(); setInterval(tick, 1000);
+  setInterval(()=>{ if(navigator.onLine && CFG.URL.indexOf("http")===0 && pendientes().length) enviar(false); }, 90000);
+  window.addEventListener("online", ()=>{ if(pendientes().length) enviar(false); });
+  try{ if(navigator.wakeLock) navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){}
+  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden){ try{ navigator.wakeLock && navigator.wakeLock.request("screen").catch(()=>{}); }catch(e){} }});
+}
+function tick(){
+  const d = new Date();
+  document.getElementById("clock").textContent = horaStr(d);
+  document.getElementById("franja").textContent = franjaDe(d);
+  document.querySelectorAll("#wait-list .t").forEach(e=>{ e.textContent = mmss(segs(e.dataset.t0)); });
+}
+function vista(){
+  const activa = !!S.sesion;
+  document.getElementById("v-setup").classList.toggle("hidden", activa);
+  document.getElementById("tabs").classList.toggle("hidden", !activa);
+  document.getElementById("hdr-sub").textContent = activa ? (S.sesion.punto_codigo+" · "+S.sesion.punto_nombre+" · "+S.sesion.observador) : "Sin sesión activa";
+  if(activa){ ir(window._tab || "buses"); } else {
+    ["buses","espera","incid","reg"].forEach(v=>document.getElementById("v-"+v).classList.add("hidden"));
+  }
+  pintarRutas(); resumen();
+}
+function ir(v){
+  window._tab = v;
+  ["buses","espera","incid","reg"].forEach(x=>document.getElementById("v-"+x).classList.toggle("hidden", x!==v));
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on", b.dataset.v===v));
+  if(v==="espera") pintarEspera();
+  if(v==="reg") resumen();
+  window.scrollTo(0,0);
+}
+function iniciarSesion(){
+  const obs = document.getElementById("s-obs").value.trim();
+  let cod = document.getElementById("s-punto").value, nom = "";
+  if(!obs){ toast("Escribe tu nombre."); return; }
+  if(!cod){ toast("Selecciona el punto de observación."); return; }
+  if(cod==="__otro"){
+    nom = document.getElementById("s-punto-otro").value.trim();
+    if(!nom){ toast("Escribe el nombre del punto."); return; }
+    cod = "OTRO";
+  } else { nom = (PUNTOS.find(p=>p.c===cod)||{}).n || ""; }
+  const d = new Date();
+  S.sesion = {
+    id: uid(), fecha: fechaStr(d), punto_codigo: cod, punto_nombre: nom, observador: obs,
+    clima: document.getElementById("s-clima").value, notas: document.getElementById("s-notas").value.trim(),
+    inicio: isoLocal(d), fin: ""
+  };
+  try{ localStorage.setItem(KEY+"_obs", obs); }catch(e){}
+  guardar(); vista();
+}
+function finalizarSesion(){
+  if(!confirm("¿Finalizar la sesión? Se enviarán los datos pendientes.")) return;
+  if(S.esperaActiva && S.esperaActiva.length && !confirm("Hay pasajeros en espera sin cerrar. ¿Finalizar de todas formas? Se descartarán.")) return;
+  const s = S.sesion; s.fin = isoLocal(new Date());
+  s.n_buses = S.buses.filter(b=>b.sesion_id===s.id).length;
+  S.sesiones.push(Object.assign({_sent:"no"}, s));
+  S.sesion = null; S.esperaActiva = [];
+  guardar(); vista(); enviar(true);
+}
+function base(d){
+  const s = S.sesion;
+  return {id:uid(), sesion_id:s.id, fecha:fechaStr(d), hora:horaStr(d), fecha_hora:isoLocal(d),
+    punto_codigo:s.punto_codigo, punto_nombre:s.punto_nombre, observador:s.observador,
+    franja:franjaDe(d), clima:s.clima, _sent:"no"};
+}
+
+/* ---------- Buses ---------- */
+function pintarRutas(){
+  const g = document.getElementById("route-grid"); if(!g) return;
+  const sid = S.sesion && S.sesion.id;
+  g.innerHTML = RUTAS.map((r,i)=>{
+    const n = S.buses.filter(b=>b.sesion_id===sid && b.empresa_ruta===r).length;
+    return `<button class="route" onclick="abrirBus(${i})"><b>${esc(r)}</b><span class="n">${n} en esta sesión</span></button>`;
+  }).join("");
+}
+function abrirBus(i){
+  pendBus = {ruta:RUTAS[i], t:new Date(), occ:null};
+  document.getElementById("sb-title").textContent = pendBus.ruta;
+  document.getElementById("sb-time").textContent = "llegó "+horaStr(pendBus.t);
+  ["sb-sube","sb-baja","sb-placa"].forEach(id=>document.getElementById(id).value="");
+  document.querySelectorAll("#occ-chips .chip").forEach(c=>c.classList.remove("on"));
+  document.getElementById("sb-save").disabled = true;
+  document.getElementById("sheet-bus").classList.remove("hidden");
+}
+function elegirOcc(v){
+  pendBus.occ = v;
+  document.querySelectorAll("#occ-chips .chip").forEach(c=>c.classList.toggle("on", Number(c.dataset.v)===v));
+  document.getElementById("sb-save").disabled = false;
+}
+function paso(id, d){
+  const el = document.getElementById(id); let v = el.value===""? null : Number(el.value);
+  v = Math.max(0, (v==null? (d>0?0:0) : v) + d); if(el.value==="" && d<0) v = 0;
+  el.value = v;
+}
+function guardarBus(){
+  if(!pendBus || pendBus.occ==null) return;
+  const sube = document.getElementById("sb-sube").value, baja = document.getElementById("sb-baja").value;
+  const r = base(pendBus.t);
+  const sid = S.sesion.id;
+  const previo = S.buses.filter(b=>b.sesion_id===sid && b.empresa_ruta===pendBus.ruta).map(b=>new Date(b.fecha_hora)).sort((a,b)=>b-a)[0];
+  r.empresa_ruta = pendBus.ruta;
+  r.placa = document.getElementById("sb-placa").value.trim().toUpperCase();
+  r.ocupacion_pct = pendBus.occ;
+  r.suben = sube===""? "" : Number(sube);
+  r.bajan = baja===""? "" : Number(baja);
+  r.intervalo_s = previo ? Math.round((pendBus.t - previo)/1000) : "";
+  S.buses.push(r); guardar();
+  cerrarSheet("sheet-bus"); pintarRutas(); resumen();
+  toast("✓ "+pendBus.ruta+" · "+horaStr(pendBus.t)); pendBus = null;
+}
+function cerrarSheet(id){ document.getElementById(id).classList.add("hidden"); }
+
+/* ---------- Espera ---------- */
+function llegaPasajero(){
+  S.esperaActiva.push({id:uid(), t0:isoLocal(new Date())}); guardar(); pintarEspera();
+}
+function segs(iso){ return Math.max(0, Math.round((Date.now()-new Date(iso))/1000)); }
+function mmss(s){ return pad(Math.floor(s/60))+":"+pad(s%60); }
+function pintarEspera(){
+  const el = document.getElementById("wait-list"); if(!el) return;
+  if(!S.esperaActiva.length){ el.innerHTML = '<p class="sub">Sin pasajeros en observación.</p>'; return; }
+  el.innerHTML = S.esperaActiva.map((w,i)=>`
+    <div class="wait"><span class="t" data-t0="${w.t0}">${mmss(segs(w.t0))}</span>
+      <span class="sub grow">desde ${w.t0.slice(11,19)}</span>
+      <button class="pri" onclick="abordo(${i})">Abordó</button>
+      <button class="ghost" onclick="desistio(${i})">Se fue</button></div>`).join("");
+}
+function abordo(i){
+  pendAb = i;
+  document.getElementById("ab-grid").innerHTML = RUTAS.map((r,k)=>`<button class="route" onclick="cerrarEspera(${k})"><b>${esc(r)}</b></button>`).join("");
+  document.getElementById("sheet-ab").classList.remove("hidden");
+}
+function cerrarEspera(k){
+  const w = S.esperaActiva[pendAb]; if(!w) return;
+  const d = new Date(); const r = base(new Date(w.t0));
+  r.hora_llegada = w.t0.slice(11,19); r.hora_abordaje = horaStr(d);
+  r.espera_s = Math.round((d - new Date(w.t0))/1000);
+  r.ruta_abordada = RUTAS[k]; r.resultado = "Abordó";
+  S.espera.push(r); S.esperaActiva.splice(pendAb,1); guardar();
+  cerrarSheet("sheet-ab"); pintarEspera(); resumen(); toast("✓ Espera "+mmss(r.espera_s)+" · "+RUTAS[k]);
+}
+function desistio(i){
+  const w = S.esperaActiva[i]; if(!w) return;
+  const d = new Date(); const r = base(new Date(w.t0));
+  r.hora_llegada = w.t0.slice(11,19); r.hora_abordaje = "";
+  r.espera_s = Math.round((d - new Date(w.t0))/1000);
+  r.ruta_abordada = ""; r.resultado = "Se fue / no abordó";
+  S.espera.push(r); S.esperaActiva.splice(i,1); guardar(); pintarEspera(); resumen();
+}
+
+/* ---------- Incidencias ---------- */
+function elegirInc(btn){
+  document.querySelectorAll("#inc-chips .chip").forEach(c=>c.classList.remove("on"));
+  btn.classList.add("on"); incSel = btn.textContent;
+}
+function guardarIncidencia(){
+  const t = document.getElementById("inc-txt").value.trim();
+  if(!incSel && !t){ toast("Elige un tipo o escribe una descripción."); return; }
+  const r = base(new Date()); r.tipo = incSel || "Otra"; r.detalle = t;
+  S.incid.push(r); guardar(); incSel = null;
+  document.getElementById("inc-txt").value = "";
+  document.querySelectorAll("#inc-chips .chip").forEach(c=>c.classList.remove("on"));
+  resumen(); toast("✓ Incidencia registrada");
+}
+
+/* ---------- Registro ---------- */
+function todos(){ return [].concat(S.buses, S.espera, S.incid, S.sesiones); }
+function pendientes(){ return todos().filter(r=>r._sent!=="ok"); }
+function resumen(){
+  const t = todos(), ok = t.filter(r=>r._sent==="ok").length, sc = t.filter(r=>r._sent==="sin_confirmar").length;
+  const pe = t.length-ok;
+  const set = (id,v)=>{ const e=document.getElementById(id); if(e) e.textContent=v; };
+  const sid = S.sesion && S.sesion.id;
+  set("k-buses", S.buses.filter(b=>b.sesion_id===sid).length);
+  set("k-esp", S.espera.filter(b=>b.sesion_id===sid).length);
+  set("k-inc", S.incid.filter(b=>b.sesion_id===sid).length);
+  set("k-pend", pe); set("k-ok", ok); set("k-sc", sc);
+  set("k0-pend", pe); set("k0-ok", ok); set("k0-tot", t.length);
+  const ult = [].concat(S.buses.map(r=>[r,"Bus",r.empresa_ruta+" · "+r.ocupacion_pct+"%"]),
+                        S.espera.map(r=>[r,"Espera",mmss(r.espera_s)+" · "+(r.ruta_abordada||r.resultado)]),
+                        S.incid.map(r=>[r,"Incid.",r.tipo]))
+    .sort((a,b)=>new Date(b[0].fecha_hora)-new Date(a[0].fecha_hora)).slice(0,15);
+  const tb = document.getElementById("tbl-ult");
+  if(tb) tb.innerHTML = '<tr><th>Hora</th><th>Tipo</th><th>Detalle</th><th>Envío</th></tr>' +
+    ult.map(([r,tp,d])=>`<tr><td>${r.hora}</td><td>${tp}</td><td>${esc(d)}</td><td class="${r._sent==="ok"?"st-ok":r._sent==="sin_confirmar"?"st-sc":"st-no"}">${r._sent==="ok"?"✓":r._sent==="sin_confirmar"?"?":"…"}</td></tr>`).join("");
+}
+function deshacerUltimo(){
+  const c = [].concat(S.buses.map(r=>["buses",r]), S.espera.map(r=>["espera",r]), S.incid.map(r=>["incid",r]))
+    .filter(x=>x[1].sesion_id===(S.sesion&&S.sesion.id)).sort((a,b)=>new Date(b[1].fecha_hora)-new Date(a[1].fecha_hora))[0];
+  if(!c){ toast("No hay registros en esta sesión."); return; }
+  if(c[1]._sent!=="no"){ toast("El último ya se envió. Bórralo directamente en el Excel."); return; }
+  if(!confirm("¿Borrar el último registro ("+c[1].hora+")?")) return;
+  S[c[0]] = S[c[0]].filter(x=>x.id!==c[1].id); guardar(); pintarRutas(); resumen();
+}
+
+/* ---------- Envío a Google Sheets ---------- */
+async function enviar(manual){
+  if(enviando) return;
+  if(CFG.URL.indexOf("http")!==0){ if(manual) toast("Falta configurar la URL del script en el archivo."); return; }
+  const grupos = {
+    Sesiones: S.sesiones.filter(r=>r._sent!=="ok"),
+    Pasos_Bus: S.buses.filter(r=>r._sent!=="ok"),
+    Espera: S.espera.filter(r=>r._sent!=="ok"),
+    Incidencias: S.incid.filter(r=>r._sent!=="ok")
+  };
+  const n = Object.values(grupos).reduce((a,g)=>a+g.length,0);
+  if(!n){ if(manual) toast("No hay pendientes."); return; }
+  const limpiar = a => a.map(r=>{ const o = Object.assign({}, r); delete o._sent; return o; });
+  const filas = {}; for(const k in grupos) filas[k] = limpiar(grupos[k]);
+  const body = JSON.stringify({clave:CFG.CLAVE, filas});
+  const marcar = est => { for(const k in grupos) grupos[k].forEach(r=>r._sent = est); guardar(); resumen(); };
+  enviando = true;
+  try{
+    const r = await fetch(CFG.URL, {method:"POST", body, redirect:"follow"});
+    const j = await r.json();
+    if(j && j.ok){ marcar("ok"); toast("✓ "+n+" registros confirmados en el Excel"); }
+    else { toast("El script rechazó el envío: "+(j&&j.error||"error")); }
+  }catch(e1){
+    try{
+      await fetch(CFG.URL, {method:"POST", body, mode:"no-cors"});
+      marcar("sin_confirmar"); toast("Enviado, pero sin confirmación. Revisa el Excel.");
+    }catch(e2){ toast("Sin conexión. Los datos quedan guardados en el teléfono."); }
+  }finally{ enviando = false; }
+}
+
+/* ---------- CSV ---------- */
+function descargar(tipo){
+  const m = {buses:S.buses, espera:S.espera, incid:S.incid, sesiones:S.sesiones}[tipo] || [];
+  if(!m.length){ toast("No hay datos de este tipo."); return; }
+  const cols = Object.keys(m.reduce((a,r)=>Object.assign(a,r),{})).filter(c=>c!=="_sent");
+  const q = v => '"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const csv = "﻿"+cols.join(",")+"\n"+m.map(r=>cols.map(c=>q(r[c])).join(",")).join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download = "conteo_"+tipo+"_"+fechaStr(new Date())+".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+init();
+</script>
+</body>
+</html>
